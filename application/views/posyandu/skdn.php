@@ -31,6 +31,72 @@
                             </thead>
 
                             <tbody>
+                                <?php foreach ($uraian as $item1) { ?>
+                                    <tr role="row">
+                                        <td class="text-center"><?= 1 + @$number++ ?></td>
+                                        <td><?= $item1["label"] ?></td>
+                                        <?php
+                                        $totalLaki = 0;
+                                        foreach ($umur as $item2) {
+                                            $count = $this->db->select("count(pengukuran.idpengukuran) AS jumlah")
+                                            ->from("pengukuran")
+                                            ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
+                                            ->join("penduduk", "penduduk.nik=pengukuran.nik")
+                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
+                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
+                                            ->where("pengukuran.idacara =", $item1["id"])
+                                            ->where("penduduk.kelamin =", "L")
+                                            ->get()->first_row();
+                                            $totalLaki = $totalLaki + $count->jumlah;
+
+                                            if(is_array(@$pengecualian[$item1["id"]]) && in_array($item2["id"], $pengecualian[$item1["id"]]) ) {
+                                                echo "<td style=\"background-color: #23384E\"></td>";
+                                            }
+                                            else {
+                                                echo "<td class=\"text-center\">".$count->jumlah."</td>";
+                                            }
+                                        }
+
+                                        if($item1["id"] === 11) {
+                                            echo "<td style=\"background-color: #23384E\"></td>";
+                                        }
+                                        else {
+                                            echo "<td class=\"text-center\">".$totalLaki."</td>";
+                                        }
+
+                                        $totalPerempuan = 0;
+                                        foreach ($umur as $item2) {
+                                            $count = $this->db->select("count(pengukuran.idpengukuran) AS jumlah")
+                                            ->from("pengukuran")
+                                            ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
+                                            ->join("penduduk", "penduduk.nik=pengukuran.nik")
+                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
+                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
+                                            ->where("pengukuran.idacara =", $item1["id"])
+                                            ->where("penduduk.kelamin =", "P")
+                                            ->get()->first_row();
+                                            $totalPerempuan = $totalPerempuan + $count->jumlah;
+
+                                            if(is_array(@$pengecualian[$item1["id"]]) && in_array($item2["id"], $pengecualian[$item1["id"]]) ) {
+                                                echo "<td style=\"background-color: #23384E\"></td>";
+                                            }
+                                            else {
+                                                echo "<td class=\"text-center\">".$count->jumlah."</td>";
+                                            }
+                                        }
+
+                                        if($item1["id"] === 11) {
+                                            echo "<td style=\"background-color: #23384E\"></td>";
+                                        }
+                                        else {
+                                            echo "<td class=\"text-center\">".$totalPerempuan."</td>";
+                                        } ?>
+
+                                        <td class="text-center"><?= $totalLaki+$totalPerempuan ?></td>
+                                        <!-- <td class="text-center" style="background-color: black"><?= $totalLaki+$totalPerempuan ?></td> -->
+                                    </tr>
+                                <?php } ?>
+
                                 <!-- <?php $no = 1;
                                         foreach ($rekap as $p) { ?>
                                     <tr role="row">

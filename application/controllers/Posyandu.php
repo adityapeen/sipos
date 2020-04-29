@@ -227,6 +227,85 @@ extends CI_Controller
         $head['title'] = "Rekap Pengukuran - SIPOSYANDU";
         $data['user'] = $this->session->userdata();
 
+        $data["uraian"] = [
+            [
+                "id" => 1,
+                "label" => "Uraian 1"
+            ],
+            [
+                "id" => 2,
+                "label" => "Uraian 2"
+            ],
+            [
+                "id" => 3,
+                "label" => "Uraian 3"
+            ],
+            [
+                "id" => 4,
+                "label" => "Uraian 4"
+            ],
+            [
+                "id" => 5,
+                "label" => "Uraian 5"
+            ],
+            [
+                "id" => 6,
+                "label" => "Uraian 6"
+            ],
+            [
+                "id" => 7,
+                "label" => "Uraian 7"
+            ],
+            [
+                "id" => 8,
+                "label" => "Uraian 8"
+            ],
+            [
+                "id" => 9,
+                "label" => "Uraian 9"
+            ],
+            [
+                "id" => 10,
+                "label" => "Uraian 10"
+            ],
+            [
+                "id" => 11,
+                "label" => "Uraian 11"
+            ],
+        ];
+
+        $data["umur"] = [
+            [
+                "id"   => 1,
+                "label" => "0-5 bln",
+                "min"   => 0,
+                "max"   => 5
+            ],
+            [
+                "id"   => 2,
+                "label" => "6-11 bln",
+                "min"   => 6,
+                "max"   => 11
+            ],
+            [
+                "id"   => 3,
+                "label" => "12-24 bln",
+                "min"   => 12,
+                "max"   => 24
+            ],
+            [
+                "id"   => 4,
+                "label" => "25-59 bln",
+                "min"   => 25,
+                "max"   => 59
+            ]
+        ];
+
+        $data["pengecualian"] = [
+            "10" => [ 1 ],
+            "11" => [ 2, 3, 4],
+        ];
+
         $this->load->view('template/header', $head);
         $this->load->view('template/sidebar', $data);
         $this->load->view('posyandu/skdn', $data);
