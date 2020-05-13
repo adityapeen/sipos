@@ -2,7 +2,7 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Role Management</h1>
+    <h1 class="h3 mb-4 text-gray-800"><i class="fas fa-user-cog text-primary"></i> Role Management</h1>
     <div class="col-lg-12 mb-4">
         <?php if ($this->session->flashdata('sukses')) {
         ?>
@@ -133,8 +133,8 @@
                                                     <td><?= $p->title ?></td>
                                                     <td><?= $p->url ?></td>
                                                     <td><?= $p->icon ?></td>
-                                                    <td class="text-center"><?php if ($p->is_active == 1) echo 'Ya';
-                                                                            else echo 'Tidak'; ?></td>
+                                                    <td class="text-center"><?php if ($p->is_active == 1) echo '<div class="badge badge-success badge-pill">Aktif</div>';
+                                                                            else echo '<div class="badge badge-warning badge-pill">Nonaktif</div>'; ?></td>
                                                     <td>
                                                         <a href="#" class="btn btn-primary btn-circle btn-sm" data-id="<?= $p->id ?>" data-tipe="edit" data-toggle="modal" data-target="#SubMenuModal"><i class="fas fa-edit"></i></a>
                                                         <a href="#" class="btn btn-danger btn-circle btn-sm" data-id="<?= $p->id ?>" data-tipe="submenu" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></a>

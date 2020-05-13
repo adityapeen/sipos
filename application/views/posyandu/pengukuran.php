@@ -2,7 +2,7 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Pengukuran</h1>
+    <h1 class="h3 mb-4 text-gray-800"><i class="fas fa-ruler-combined text-primary"></i> Pengukuran</h1>
     <!-- Jika Berita Acara Belum Dibuat -->
     <div class="col-lg-12 mb-4">
         <?php if ($this->session->flashdata('sukses')) {
@@ -158,12 +158,13 @@
                         <input type="text" name="namabalita" id="namabalita" class="form-control" disabled="" placeholder="Nama Balita" value="" readonly>
                         <input type="hidden" name="nik" id="nik" value="">
                         <input type="hidden" name="idpengukuran" id="idpengukuran" value="">
+                        <input type="hidden" name="kelamin" id="kelamin" value="">
                     </div>
                     <div class="form-row">
                         <div class="col-md-6>">
                             <div class="form-group">
                                 <label>Tanggal Kegiatan</label>
-                                <input type="date" class="form-control" placeholder="Tanggal" value="<?= date('Y-m-d'); ?>" readonly>
+                                <input type="date" class="form-control" placeholder="Tanggal" value="<?= $beritaacara[0]->tglacara; ?>" readonly>
                             </div>
                         </div>
                         <div class="col">
@@ -178,19 +179,25 @@
                         <label>Berat Badan (kg)</label>
                         <input type="number" name="berat" id="berat" class="form-control" placeholder="Berat badan" value="" step=".01" required>
                     </div>
-                    <div class="form-group">
-                        <label>Tinggi Badan (cm)</label>
-                        <input type="number" name="tinggi" id="tinggi" class="form-control" placeholder="(Boleh Kosong)" value="" step=".01">
-                    </div>
-                    <div class="form-group">
-                        <label>Lingkar Kepala (cm)</label>
-                        <input type="number" name="kepala" id="kepala" class="form-control" placeholder="(Boleh Kosong)" value="" step=".01">
+                    <div class="form-row mb-1">
+                        <div class="col md-6">
+                            <div class="form-group">
+                                <label>Tinggi Badan (cm)</label>
+                                <input type="number" name="tinggi" id="tinggi" class="form-control" placeholder="(Boleh Kosong)" value="" step=".01">
+                            </div>
+                        </div>
+                        <div class="col md-6">
+                            <div class="form-group">
+                                <label>Lingkar Kepala (cm)</label>
+                                <input type="number" name="kepala" id="kepala" class="form-control" placeholder="(Boleh Kosong)" value="" step=".01">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-row mb-1">
                         <div class="col md-6">
                             <div class="form-group">
                                 <label>Keterangan</label>
-                                <input type="text" name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan" value="" readonly>
+                                <input type="text" name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan" value="">
                             </div>
                         </div>
                         <div class="col md-6">
@@ -204,35 +211,35 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col">
+                        <div class="col" id="formvita">
                             <div class="form-group">
                                 <div class="col-md-6 pr-1">
                                     <label>Vitamin A</label>
                                 </div>
                                 <div class="col-md-6 pr-1">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina" value=1 checked>
+                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina0" value=1>
                                         <label class="form-check-label" for="vitamina">Ya</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina" value=0>
+                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina1" value=0 checked>
                                         <label class="form-check-label" for="vitamina">Tidak</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col">
-                            <div class="form-group">
+                            <div class="form-group" id="formasi">
                                 <div class="col-md-6 pr-1">
                                     <label>ASI Eksklusif</label>
                                 </div>
                                 <div class="col-md-6 pr-1">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="asie" id="asie" value=1>
+                                        <input class="form-check-input" type="radio" name="asie" id="asie1" value=1>
                                         <label class="form-check-label" for="asie">Ya</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="asie" id="asie" value=0 checked>
+                                        <input class="form-check-input" type="radio" name="asie" id="asie0" value=0 checked>
                                         <label class="form-check-label" for="asie">Tidak</label>
                                     </div>
                                 </div>
@@ -260,7 +267,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form name="inputBalita" id="inputBalita" method="post" action="<?= base_url('user/tambahpenduduk'); ?>">
+                <form name="inputBalita" id="inputBalita" method="post" action="<?= base_url('user/tambahpenduduk/') . $user['idposyandu']; ?>">
                     <input type="hidden" name="idposyandu" value="<?= $user['idposyandu']; ?>">
                     <input type="hidden" name="ukur" value=1>
                     <div class="form-group">
@@ -356,13 +363,14 @@
         var berat = $('#berat').val();
         var nik = $('#nik').val();
         var umur = $('#umur').val();
-        var ket;
+        var kelamin = $('#kelamin').val();
 
         //alert($('#berat').val());
         $.get("<?= base_url('api/getket'); ?>", {
                 nik: nik,
                 berat: berat,
                 umur: umur,
+                kelamin: kelamin,
             })
             .done(function(data) {
                 var e = JSON.parse(data);
@@ -404,8 +412,16 @@
                         $('#inputTimbangan').trigger('reset');
                         $('#idpengukuran').val('');
                         $('#namabalita').val(e.nama);
+                        $('#kelamin').val(e.kelamin);
                         $('#nik').val(e.nik);
                         $('#umur').val(e.umur);
+                        if (e.umur >= 6) {
+                            $('#formasi').hide();
+                            $('#formvita').show();
+                        } else {
+                            $('#formasi').show();
+                            $('#formvita').hide();
+                        }
                         $('#statusbantuan').val(e.statusbantuan);
                     });
                 });
@@ -426,8 +442,17 @@
                         $('#tinggi').val(e.tinggi);
                         $('#kepala').val(e.kepala);
                         $('#keterangan').val(e.keterangan);
-                        $('#vitamina').val(e.vitamina);
-                        $('#asie').val(e.asi);
+                        //$('#vitamina').val(e.vitamina);
+                        if (e.umur >= 6) {
+                            $('#formasi').hide();
+                            $('#formvita').show();
+                        } else {
+                            $('#formasi').show();
+                            $('#formvita').hide();
+                        }
+                        (e.asi == 0) ? $('#asie0').prop('checked', true): $('#asie1').prop('checked', true);
+                        (e.vitamina == 0) ? $('#vitamina0').prop('checked', true): $('#vitamina1').prop('checked', true);
+                        //$('#asie').val(e.asi);
                         $('#statusbantuan').val(e.statusbantuan);
                     });
                 });

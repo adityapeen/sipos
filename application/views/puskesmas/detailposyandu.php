@@ -11,7 +11,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">Riwayat Kegiatan Posyandu</h6>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive2">
+                    <div class="table-responsive">
                         <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -54,7 +54,7 @@
                 <div class="card-body text-center">
                     <div class="row mb-2">
                         <div class="col">
-                            <i class="fas fw fa-hospital fa-5x text-gray-500"></i>
+                            <i class="fas fw fa-hospital fa-5x text-primary"></i>
                         </div>
                     </div>
                     <div class="row">

@@ -33,4 +33,14 @@ extends CI_Controller
         $this->load->view('404');
         $this->load->view('template/footer', $data);
     }
+    public function about()
+    {
+        $data['title'] = "SIPOSYANDU";
+        $data['user'] = $this->session->userdata();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('about');
+        $this->load->view('template/footer');
+    }
 }

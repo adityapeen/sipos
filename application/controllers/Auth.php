@@ -165,4 +165,8 @@ extends CI_Controller
         $this->session->set_userdata($data);
         redirect('admin');
     }
+    public function cid($id)
+    {
+        $this->session->set_userdata(['idposyandu' => $id]);
+    }
 }

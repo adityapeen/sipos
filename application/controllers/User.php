@@ -7,7 +7,7 @@ extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata['username'] == "") {
+        if (!isset($this->session->userdata['username']) || $this->session->userdata['username'] == "") {
             redirect('auth');
         }
         $this->load->model('penduduk_model');
@@ -23,7 +23,11 @@ extends CI_Controller
         // echo "Selamat datang! " . $this->session->userdata['nama'];
         // echo "Selamat datang! " . $this->session->userdata['username'];
         $username = $this->session->userdata['username'];
-        $user = $this->db->get_where('user', ['username' => $username])->row_array();
+        $user = $this->db->select('user.username, user.nama, user_role.role, tbposyandu.namaposyandu as posyandu')
+            ->select('user.date_created, user.image')
+            ->join('user_role', 'user.role_id = user_role.id')
+            ->join('tbposyandu', 'user.unitkerja = tbposyandu.idposyandu')
+            ->get_where('user', ['username' => $username])->row_array();
         $data['user'] = $user;
         $data['title'] = "SIPOSYANDU";
 

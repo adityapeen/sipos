@@ -49,7 +49,8 @@ class Kegiatan_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->select('k.idacara, k.idposyandu, a.namaposyandu, k.tglacara, k.judul, k.pemateri, k.notulen as niknot, k.catatan, k.pemateri as nikpem, n.nama as notulen, p.nama as pemateri');
+        $this->db->select('k.idacara, k.idposyandu, a.namaposyandu, k.tglacara, k.judul, k.pemateri, k.notulen as niknot, k.catatan, k.pemateri as nikpem, n.nama as notulen, p.nama as pemateri,')
+            ->select('(SELECT count(idpengukuran) from pengukuran WHERE idacara = k.idacara) as tertimbang');
         $this->db->from($this->_table . ' as k');
         $this->db->join('penduduk n', 'k.notulen = n.nik', 'left');
         $this->db->join('penduduk p', 'k.pemateri = p.nik', 'left');
@@ -136,5 +137,44 @@ class Kegiatan_model extends CI_Model
         $this->db->order_by('tgllahir', 'ASC');
         $this->db->from('penduduk' . " as p");
         return $this->db->get()->result();
+    }
+    public function getHeaderSKDN($idacara)
+    {
+        $data = $this->_getDetailAcara($idacara);
+        $result = [
+            [
+                'nama' => 'Kecamatan',
+                'data' => $data->kecamatan
+            ],
+            [
+                'nama' => 'Puskesmas',
+                'data' => $data->puskesmas
+            ],
+            [
+                'nama' => 'Desa',
+                'data' => $data->desa
+            ],
+            [
+                'nama' => 'Posyandu',
+                'data' => $data->posyandu
+            ],
+            [
+                'nama' => 'Tanggal Penimbangan',
+                'data' => $data->tanggal
+            ],
+        ];
+        return $result;
+    }
+    private function _getDetailAcara($id)
+    {
+        $this->db->select('k.tglacara as tanggal, a.namaposyandu as posyandu, d.nama as desa,')
+            ->select('pus.namapuskesmas as puskesmas, kec.nama as kecamatan')
+            ->from($this->_table . ' as k')
+            ->join('tbposyandu a', 'k.idposyandu = a.idposyandu')
+            ->join('tbdesa d', 'a.iddesa = d.iddesa')
+            ->join('tbkecamatan kec', 'd.idkec = kec.idkec')
+            ->join('tbpuskesmas pus', 'kec.idkec = pus.idkec')
+            ->where('idacara', $id);
+        return $this->db->get()->first_row();
     }
 }

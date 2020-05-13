@@ -161,7 +161,7 @@ class Penduduk_model extends CI_Model
 
     public function getDataPeserta($nik)
     {
-        $this->db->select('p.nik, p.nama, (DATEDIFF(CURDATE(), tgllahir)/30.40) as umur, p.statusbantuan');
+        $this->db->select('p.nik, p.kelamin, p.nama, (DATEDIFF(CURDATE(), tgllahir)/30.40) as umur, p.statusbantuan');
         $this->db->from($this->_table . " as p");
         $this->db->where('nik', $nik);
         return $this->db->get()->result();

@@ -7,7 +7,7 @@ extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata['username'] == "") {
+        if (!isset($this->session->userdata['username']) || $this->session->userdata['username'] == "") {
             redirect('auth');
         }
         if ($this->session->userdata['role_id'] != 1) {

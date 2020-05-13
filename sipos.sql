@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2020 at 06:51 PM
+-- Generation Time: May 03, 2020 at 09:33 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -21,6 +21,86 @@ SET time_zone = "+00:00";
 --
 -- Database: `sipos`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `berat`
+--
+
+CREATE TABLE `berat` (
+  `umur` int(2) NOT NULL,
+  `kenaikan_l` decimal(3,1) DEFAULT NULL,
+  `kenaikan_p` decimal(3,1) DEFAULT NULL,
+  `garis_merah_l` decimal(4,2) DEFAULT NULL,
+  `garis_merah_p` decimal(4,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `berat`
+--
+
+INSERT INTO `berat` (`umur`, `kenaikan_l`, `kenaikan_p`, `garis_merah_l`, `garis_merah_p`) VALUES
+(1, '0.8', '0.8', '2.90', '2.70'),
+(2, '0.9', '0.9', '3.80', '3.40'),
+(3, '0.8', '0.8', '4.40', '4.00'),
+(4, '0.6', '0.6', '4.90', '4.40'),
+(5, '0.5', '0.5', '5.30', '4.80'),
+(6, '0.4', '0.4', '5.70', '5.10'),
+(7, '0.4', '0.3', '5.90', '5.35'),
+(8, '0.3', '0.3', '6.20', '5.55'),
+(9, '0.3', '0.3', '6.40', '5.75'),
+(10, '0.3', '0.3', '6.60', '5.95'),
+(11, '0.3', '0.2', '6.80', '6.10'),
+(12, '0.2', '0.2', '6.90', '6.30'),
+(13, '0.2', '0.2', '7.10', '6.40'),
+(14, '0.2', '0.2', '7.20', '6.60'),
+(15, '0.2', '0.2', '7.40', '6.75'),
+(16, '0.2', '0.2', '7.50', '6.90'),
+(17, '0.2', '0.2', '7.70', '7.05'),
+(18, '0.2', '0.2', '7.80', '7.20'),
+(19, '0.2', '0.2', '8.00', '7.35'),
+(20, '0.2', '0.2', '8.10', '7.50'),
+(21, '0.2', '0.2', '8.20', '7.60'),
+(22, '0.2', '0.2', '8.40', '7.80'),
+(23, '0.2', '0.2', '8.50', '7.90'),
+(24, '0.2', '0.2', '8.60', '8.05'),
+(25, '0.2', '0.2', '8.80', '8.20'),
+(26, '0.2', '0.2', '8.90', '8.35'),
+(27, '0.2', '0.2', '9.00', '8.50'),
+(28, '0.2', '0.2', '9.10', '8.60'),
+(29, '0.2', '0.2', '9.30', '8.75'),
+(30, '0.2', '0.2', '9.40', '8.90'),
+(31, '0.2', '0.2', '9.50', '9.00'),
+(32, '0.2', '0.2', '9.60', '9.15'),
+(33, '0.2', '0.2', '9.70', '9.25'),
+(34, '0.2', '0.2', '9.80', '9.40'),
+(35, '0.2', '0.2', '9.90', '9.50'),
+(36, '0.2', '0.2', '10.00', '9.60'),
+(37, '0.2', '0.2', '10.10', '9.70'),
+(38, '0.2', '0.2', '10.20', '9.80'),
+(39, '0.2', '0.2', '10.30', '9.95'),
+(40, '0.2', '0.2', '10.40', '10.05'),
+(41, '0.2', '0.2', '10.50', '10.20'),
+(42, '0.2', '0.2', '10.60', '10.30'),
+(43, '0.2', '0.2', '10.70', '10.40'),
+(44, '0.2', '0.2', '10.80', '10.50'),
+(45, '0.2', '0.2', '10.90', '10.60'),
+(46, '0.2', '0.2', '11.00', '10.70'),
+(47, '0.2', '0.2', '11.10', '10.80'),
+(48, '0.2', '0.2', '11.20', '10.90'),
+(49, '0.2', '0.2', '11.30', '11.00'),
+(50, '0.2', '0.2', '11.40', '11.10'),
+(51, '0.2', '0.2', '11.50', '11.20'),
+(52, '0.2', '0.2', '11.60', '11.30'),
+(53, '0.2', '0.2', '11.70', '11.40'),
+(54, '0.2', '0.2', '11.80', '11.50'),
+(55, '0.2', '0.2', '11.90', '11.60'),
+(56, '0.2', '0.2', '12.00', '11.70'),
+(57, '0.2', '0.2', '12.10', '11.80'),
+(58, '0.2', '0.2', '12.20', '11.85'),
+(59, '0.2', '0.2', '12.30', '11.95'),
+(60, '0.2', '0.2', '12.40', '12.05');
 
 -- --------------------------------------------------------
 
@@ -47,7 +127,7 @@ INSERT INTO `beritaacara` (`idacara`, `tglacara`, `idposyandu`, `judul`, `pemate
 (2, '2020-01-05', 1, 'Posyandu Bulan Januari', NULL, '3403010505980001', NULL),
 (3, '2020-02-05', 1, 'Posyandu Bulan Februari', NULL, '3403010505980001', NULL),
 (22, '2020-03-04', 1, 'Maret 2020', NULL, '3403010505980001', NULL),
-(23, '2020-04-05', 1, 'April', NULL, '3403010505980001', NULL);
+(23, '2020-04-05', 1, 'April', NULL, '3403010505980001', 'Mari Mencoba Semuanya');
 
 -- --------------------------------------------------------
 
@@ -191,7 +271,8 @@ INSERT INTO `penduduk` (`nik`, `nama`, `kelamin`, `tempatlahir`, `tgllahir`, `al
 ('3403079', 'Awalina', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
 ('3403081', 'Khotimah', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
 ('3403083', 'Wasikem', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
-('3403085', 'Sri Mulyani', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, '');
+('3403085', 'Sri Mulyani', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
+('8253141', 'AA Khun', 'L', NULL, '2020-04-02', '', '', 'Islam', '3403085', '3403011009670001', 1, 0, '');
 
 -- --------------------------------------------------------
 
@@ -320,7 +401,8 @@ INSERT INTO `pengukuran` (`idpengukuran`, `idacara`, `idpetugas`, `nik`, `berat`
 (127, 3, '3403010505980001', '34030121', '21.20', '111.0', '53.0', 'N', 0, 0, NULL, NULL, NULL, 'NON'),
 (129, 22, '34030130', '34030130', '16.50', NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL),
 (130, 23, '3403010505980001', '34030130', '16.70', NULL, NULL, 'N', 0, 1, NULL, NULL, NULL, 'KIN'),
-(131, 23, '3403010505980001', '34030134', '14.70', '0.0', '0.0', 'O', 0, 1, NULL, NULL, NULL, 'KIN');
+(132, 23, '3403010505980001', '34030134', '14.70', NULL, NULL, 'O', 0, 1, NULL, NULL, NULL, 'KIN'),
+(133, 23, '3403010505980001', '8253141', '3.00', NULL, NULL, 'B', 0, 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -589,8 +671,7 @@ CREATE TABLE `user_role` (
 INSERT INTO `user_role` (`id`, `role`) VALUES
 (1, 'Administrator'),
 (2, 'Puskesmas'),
-(3, 'Kader'),
-(4, 'Ortu');
+(3, 'Kader');
 
 -- --------------------------------------------------------
 
@@ -617,18 +698,26 @@ INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active
 (3, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-cog', 1),
 (4, 3, 'Berita Acara', 'posyandu/acara', 'fas fa-fw fa-calendar-check', 1),
 (5, 3, 'Pengukuran', 'posyandu/pengukuran', 'fas fa-fw fa-ruler-combined', 1),
-(6, 3, 'Peserta', 'posyandu/peserta', 'fas fa-child', 1),
-(7, 2, 'Buat Akun', 'user/adduser', 'fas fa-fw fa-user', 0),
-(8, 2, 'Kelola User', 'puskesmas/userlist', 'fas fa-fw fa-table', 1),
+(6, 3, 'Peserta', 'posyandu/peserta', 'fas fa-fw fa-child', 1),
+(7, 2, 'Overview', 'puskesmas', 'fas fa-fw fa-chart-pie', 1),
+(8, 2, 'Posyandu', 'puskesmas/posyandu', 'fas fa-fw fa-first-aid', 1),
 (9, 4, 'Data Penduduk', 'user/penduduk', 'fas fa-address-card', 1),
 (10, 4, 'Tambah Penduduk', 'user/tambahpenduduk', 'fas fa-user-edit', 0),
 (11, 3, 'Rekap Data', 'posyandu/rekap', 'fas fa-fw fa-chart-bar', 1),
+(12, 2, 'Kelola User', 'puskesmas/userlist', 'fas fa-fw fa-table', 1),
 (14, 1, 'User', 'admin/userlist', 'fas fa-fw fa-user', 1),
-(15, 2, 'Posyandu', 'puskesmas/posyandu', 'fas fa-fw fa-first-aid', 1);
+(16, 3, 'SKDN', 'posyandu/skdn', 'fas fa-fw fa-table', 1),
+(17, 2, 'BGM', 'puskesmas/bgm', 'fas fa-fw fa-weight', 1);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `berat`
+--
+ALTER TABLE `berat`
+  ADD PRIMARY KEY (`umur`);
 
 --
 -- Indexes for table `beritaacara`
@@ -736,13 +825,13 @@ ALTER TABLE `user_sub_menu`
 -- AUTO_INCREMENT for table `beritaacara`
 --
 ALTER TABLE `beritaacara`
-  MODIFY `idacara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `idacara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `pengukuran`
 --
 ALTER TABLE `pengukuran`
-  MODIFY `idpengukuran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
+  MODIFY `idpengukuran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `tbdesa`
@@ -772,7 +861,7 @@ ALTER TABLE `tbposyandu`
 -- AUTO_INCREMENT for table `tbprovinsi`
 --
 ALTER TABLE `tbprovinsi`
-  MODIFY `idprov` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idprov` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbpuskesmas`
@@ -808,7 +897,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables

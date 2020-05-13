@@ -28,6 +28,7 @@ class Cetak extends CI_Controller
         $header = strtoupper($this->input->post('header'));
         $tahun = $this->input->post('tahun');
         $bulan = strtoupper($this->input->post('bulan'));
+        $doc = 'Rekap ' . $this->input->post('header') . ' Bulan ' . $bulan . ' ' . $tahun;
 
 
 
@@ -78,6 +79,6 @@ class Cetak extends CI_Controller
             $pdf->Cell(13, 6, $r->statusbantuan, 1, 1, 'C');
             $no++;
         }
-        $pdf->Output();
+        $pdf->Output('I', $doc . '.pdf');
     }
 }

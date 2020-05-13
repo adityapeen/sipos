@@ -3,7 +3,16 @@
     <p class="text-center text-uppercase">REGISTER LAPORAN PEMANTAUAN PERTUMBUHAN BALITA DI POSYANDU
         <!-- <br> <b>Bulan <?= date('F', strtotime($beritaacara[0]->tglacara)); ?>
             &nbsp; &nbsp;Tahun <?= date('Y', strtotime($beritaacara[0]->tglacara)); ?></b></p> -->
-        <div class="table-responsive">
+        <div class="col-md-6 mb-3">
+            <?php foreach ($header as $h) : ?>
+                <div class="row">
+                    <div class="col"><?= $h['nama']; ?> </div>
+                    <div class="col">: <?php if ($h['nama'] == 'Tanggal Penimbangan') echo date('d-m-Y', strtotime($h['data']));
+                                        else echo $h['data']; ?> </div>
+                </div>
+            <?php endforeach ?>
+        </div>
+        <div class="table-responsive2 mb-3">
             <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
                 <div class="row">
                     <div class="col-sm-12">
@@ -36,86 +45,165 @@
                                         <td class="text-center"><?= 1 + @$number++ ?></td>
                                         <td><?= $item1["label"] ?></td>
                                         <?php
-                                        $totalLaki = 0;
-                                        foreach ($umur as $item2) {
-                                            $count = $this->db->select("count(pengukuran.idpengukuran) AS jumlah")
-                                            ->from("pengukuran")
-                                            ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
-                                            ->join("penduduk", "penduduk.nik=pengukuran.nik")
-                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
-                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
-                                            ->where("pengukuran.idacara =", $item1["id"])
-                                            ->where("penduduk.kelamin =", "L")
-                                            ->get()->first_row();
-                                            $totalLaki = $totalLaki + $count->jumlah;
+                                        $totalSemua = 0;
+                                        foreach ($kelamin as $kel) {
+                                            $totalTemp = 0;
+                                            foreach ($umur as $item2) {
+                                                $count = $this->db->select("count(pengukuran.idpengukuran) AS jumlah")
+                                                    ->from("pengukuran")
+                                                    ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
+                                                    ->join("penduduk", "penduduk.nik=pengukuran.nik")
+                                                    ->where("ROUND(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
+                                                    ->where("ROUND(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
+                                                    ->where("pengukuran.idacara =", $item1["id"])
+                                                    ->where($kel['wer'])
+                                                    ->where($item1['wer'])
+                                                    ->get()->first_row();
+                                                $totalTemp = $totalTemp + $count->jumlah;
 
-                                            if(is_array(@$pengecualian[$item1["id"]]) && in_array($item2["id"], $pengecualian[$item1["id"]]) ) {
+                                                if (is_array(@$pengecualian[$item1["id"]]) && in_array($item2["id"], $pengecualian[$item1["id"]])) {
+                                                    echo "<td style=\"background-color: #23384E\"></td>";
+                                                } else {
+                                                    echo "<td class=\"text-center\">" . $count->jumlah . "</td>";
+                                                }
+                                            }
+
+                                            if ($item1["id"] === 11) {
                                                 echo "<td style=\"background-color: #23384E\"></td>";
+                                            } else {
+                                                echo "<td class=\"text-center\">" . $totalTemp . "</td>";
                                             }
-                                            else {
-                                                echo "<td class=\"text-center\">".$count->jumlah."</td>";
-                                            }
+                                            $totalSemua += $totalTemp;
                                         }
 
-                                        if($item1["id"] === 11) {
-                                            echo "<td style=\"background-color: #23384E\"></td>";
-                                        }
-                                        else {
-                                            echo "<td class=\"text-center\">".$totalLaki."</td>";
-                                        }
+                                        // $totalPerempuan = 0;
+                                        // foreach ($umur as $item2) {
+                                        //     $count = $this->db->select("count(pengukuran.idpengukuran) AS jumlah")
+                                        //         ->from("pengukuran")
+                                        //         ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
+                                        //         ->join("penduduk", "penduduk.nik=pengukuran.nik")
+                                        //         ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
+                                        //         ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
+                                        //         ->where("pengukuran.idacara =", $item1["id"])
+                                        //         ->where("penduduk.kelamin =", "P")
+                                        //         ->get()->first_row();
+                                        //     $totalPerempuan = $totalPerempuan + $count->jumlah;
 
-                                        $totalPerempuan = 0;
-                                        foreach ($umur as $item2) {
-                                            $count = $this->db->select("count(pengukuran.idpengukuran) AS jumlah")
-                                            ->from("pengukuran")
-                                            ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
-                                            ->join("penduduk", "penduduk.nik=pengukuran.nik")
-                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
-                                            ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
-                                            ->where("pengukuran.idacara =", $item1["id"])
-                                            ->where("penduduk.kelamin =", "P")
-                                            ->get()->first_row();
-                                            $totalPerempuan = $totalPerempuan + $count->jumlah;
+                                        //     if (is_array(@$pengecualian[$item1["id"]]) && in_array($item2["id"], $pengecualian[$item1["id"]])) {
+                                        //         echo "<td style=\"background-color: #23384E\"></td>";
+                                        //     } else {
+                                        //         echo "<td class=\"text-center\">" . $count->jumlah . "</td>";
+                                        //     }
+                                        // }
 
-                                            if(is_array(@$pengecualian[$item1["id"]]) && in_array($item2["id"], $pengecualian[$item1["id"]]) ) {
-                                                echo "<td style=\"background-color: #23384E\"></td>";
-                                            }
-                                            else {
-                                                echo "<td class=\"text-center\">".$count->jumlah."</td>";
-                                            }
-                                        }
+                                        // if ($item1["id"] === 11) {
+                                        //     echo "<td style=\"background-color: #23384E\"></td>";
+                                        // } else {
+                                        //     echo "<td class=\"text-center\">" . $totalPerempuan . "</td>";
+                                        // } 
+                                        ?>
 
-                                        if($item1["id"] === 11) {
-                                            echo "<td style=\"background-color: #23384E\"></td>";
-                                        }
-                                        else {
-                                            echo "<td class=\"text-center\">".$totalPerempuan."</td>";
-                                        } ?>
-
-                                        <td class="text-center"><?= $totalLaki+$totalPerempuan ?></td>
-                                        <!-- <td class="text-center" style="background-color: black"><?= $totalLaki+$totalPerempuan ?></td> -->
+                                        <td class="text-center"><?= $totalSemua ?></td>
+                                        <!-- <td class="text-center" style="background-color: black"><?= $totalLaki + $totalPerempuan ?></td> -->
                                     </tr>
                                 <?php } ?>
 
-                                <!-- <?php $no = 1;
-                                        foreach ($rekap as $p) { ?>
-                                    <tr role="row">
-                                        <td><?= $no;
-                                            $no++ ?></td>
-                                        <td><?= $p->namabalita; ?></td>
-                                        <td><?= $p->kelamin; ?></td>
-                                        <td><?= date('j-M-Y', strtotime($p->tgllahir)); ?></td>
-                                        <td><?= $p->ibu . " / " . $p->ayah; ?></td>
-                                        <td class="text-center"><?= round($p->umur); ?></td>
-                                        <td><?= $p->berat; ?></td>
-                                        <td><?= $p->tinggi; ?></td>
-                                        <td><?= $p->kepala; ?></td>
-                                        <td class="text-center"><?= $p->keterangan; ?></td>
-                                        <td class="text-center"><?= ($p->asi == 1 ? "Ya" : "Tidak"); ?></td>
-                                        <td class="text-center"><?= ($p->vitamina == 1 ? "Ya" : "Tidak"); ?></td>
-                                        <td class="text-center"><?= $p->statusbantuan; ?></td>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            Daftar Bayi Mendapat ASI - Eksklusif (ASI-E)
+        </div>
+
+        <div class="table-responsive2 mb-3">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered dataTable hover compact" id="rekapPengukuran" cellspacing="0" role="grid" aria-describedby="dataTable_info">
+                            <thead class="text-center align-middle">
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 20px;">No</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1">Nama Bayi</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1">Nama Orangtua</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 120px;">Tanggal Lahir</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 100px;">Jenis Kelamin</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 75px;">BB (kg)</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 75px;">PB (cm)</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="6">Asi Eksklusif Bulan ke</th>
+                                </tr>
+                                <tr>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 45px;">1</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 45px;">2</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 45px;">3</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 45px;">4</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 45px;">5</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 45px;">6</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php foreach ($asie as $b) : ?>
+                                    <tr role="row" class="text-center">
+                                        <td><?= 1 + @$no++ ?></td>
+                                        <td class="text-left"><?= $b->nama ?></td>
+                                        <td class="text-left"><?= $b->ibu . ' / ' . $b->ayah ?></td>
+                                        <td><?= $b->tgllahir ?></td>
+                                        <td><?= $b->kelamin ?></td>
+                                        <td><?= $b->berat ?></td>
+                                        <td><?= $b->tinggi ?></td>
+                                        <td><?php echo (round($b->umur) == 1) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (round($b->umur) == 2) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (round($b->umur) == 3) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (round($b->umur) == 4) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (round($b->umur) == 5) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (round($b->umur) == 6) ?  'V' : NULL  ?></td>
                                     </tr>
-                                <?php } ?> -->
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            Daftar Balita Bawah Garis Merah (BGM)
+        </div>
+
+        <div class="table-responsive2 mb-3">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered dataTable hover compact" id="rekapPengukuran" cellspacing="0" role="grid" aria-describedby="dataTable_info">
+                            <thead class="text-center align-middle">
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 20px;">No</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1">Nama Balita</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1">Nama Orangtua</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 120px;">Tanggal Lahir</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 100px;">Jenis Kelamin</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1">Umur</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 75px;">BB (kg)</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 75px;">PB (cm)</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php foreach ($bgm as $b) : ?>
+                                    <tr role="row" class="text-center">
+                                        <td><?= 1 + @$n++ ?></td>
+                                        <td class="text-left"><?= $b->nama ?></td>
+                                        <td class="text-left"><?= $b->ibu . ' / ' . $b->ayah ?></td>
+                                        <td><?= $b->tgllahir ?></td>
+                                        <td><?= $b->kelamin ?></td>
+                                        <td><?= round($b->umur) ?></td>
+                                        <td><?= $b->berat ?></td>
+                                        <td><?= $b->tinggi ?></td>
+                                    </tr>
+                                <?php endforeach ?>
                             </tbody>
                         </table>
                     </div>
@@ -123,4 +211,5 @@
 
             </div>
         </div>
+</div>
 </div>

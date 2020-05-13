@@ -2,7 +2,7 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Data Posyandu</h1>
+    <h1 class="h3 mb-4 text-gray-800"><i class="fas fa-stethoscope text-primary"></i> Data Posyandu</h1>
     <div class="col-lg-12 mb-4">
         <?php if ($this->session->flashdata('sukses')) {
         ?>

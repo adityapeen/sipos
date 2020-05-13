@@ -1,5 +1,8 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800"><i class="fas fa-child text-primary"></i> Daftar Peserta</h1>
+
     <div class="col-lg-12 mb-4">
         <?php if ($this->session->flashdata('sukses')) { ?>
             <div class="card bg-success text-white shadow">
@@ -73,7 +76,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form name="inputBalita" id="inputBalita" method="post" action="<?= base_url('user/tambahpenduduk'); ?>">
+                <form name="inputBalita" id="inputBalita" method="post" action="<?= base_url('user/tambahpenduduk/') . $user['idposyandu']; ?>">
                     <input type="hidden" name="idposyandu" value="<?= $user['idposyandu']; ?>">
                     <input type="hidden" name="daftar" value=1>
                     <div class="form-group">

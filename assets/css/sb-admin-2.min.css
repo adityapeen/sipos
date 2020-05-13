@@ -9612,12 +9612,12 @@ a:focus {
 	}
 }
 .bg-login-image {
-	background: url("../img/posyandu.jpg");
+	background: url("../img/posyandu.png");
 	background-position: center;
 	background-size: cover;
 }
 .bg-register-image {
-	background: url("../img/posyandu.jpg");
+	background: url("../img/posyandu.png");
 	background-position: center;
 	background-size: cover;
 }

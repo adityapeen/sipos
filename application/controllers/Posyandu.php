@@ -7,7 +7,7 @@ extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata['username'] == "") {
+        if (!isset($this->session->userdata['username']) || $this->session->userdata['username'] == "") {
             redirect('auth');
         }
         if ($this->session->userdata['role_id'] == 4) {
@@ -23,14 +23,15 @@ extends CI_Controller
     }
     public function acara()
     {
-        $user = $this->session->userdata();
-        $head['user'] = $user;
+
+        $head['user'] = $this->session->userdata();
         $head['title'] = "Berita Acara - SIPOSYANDU";
         $th = date('Y');
         $bl = date('m');
         $idp = $this->session->idposyandu;
         $data['beritaacara'] = $this->Kegiatan_model->getBulanIni($th, $bl, $idp);
         $data['acara'] = $this->Kegiatan_model->getAll($idp);
+        $data['posyandu'] = $this->db->where('idposyandu', $idp)->get('tbposyandu')->row_array();
 
         $this->load->view('template/header', $head);
         $this->load->view('template/sidebar', $head);
@@ -81,8 +82,11 @@ extends CI_Controller
     public function deleteKegiatan()
     {
         $id = $this->input->post('idhapus');
-        if ($this->Kegiatan_model->delete($id)) $this->session->set_flashdata("sukses", "Berita Acara berhasil dihapus");
-        else $this->session->set_flashdata("gagal", "Berita Acara gagal dihapus");
+        if (!$this->Pengukuran_model->checkBeritaAcara($id)) {
+            if ($this->Kegiatan_model->delete($id)) $this->session->set_flashdata("sukses", "Berita Acara berhasil dihapus");
+            else $this->session->set_flashdata("gagal", "Berita Acara gagal dihapus");
+        } else $this->session->set_flashdata("gagal", "Berita Acara gagal dihapus, sudah ada pengukuran pada kegiatan ini");
+
         redirect('posyandu/acara');
     }
     public function peserta()
@@ -127,7 +131,7 @@ extends CI_Controller
     }
     public function saveTimbangan()
     {
-        //var_dump($this->input->post());
+        var_dump($this->input->post());
         $pengukuran = $this->Pengukuran_model;
         $validation = $this->form_validation;
         $validation->set_rules($pengukuran->rules());
@@ -180,24 +184,29 @@ extends CI_Controller
         redirect('posyandu/pengukuran');
     }
 
-    public function rekap()
+    public function rekap($id)
     {
         $head['title'] = "Rekap Pengukuran - SIPOSYANDU";
         $data['user'] = $this->session->userdata();
         $data['tahun'] = $this->db->query("SELECT DISTINCT Year(a.tglacara) as tahun FROM `pengukuran` JOIN beritaacara as a")->result();
         $data['bulan'] =  $this->db->query("SELECT DISTINCT Month(a.tglacara) as bulan, Monthname(a.tglacara) as nama FROM `pengukuran` JOIN beritaacara as a ORDER BY bulan ASC")->result();
-        $th = date('Y');
-        $bl = date('m');
-        // $th = 2020;
-        // $bl = 1;
         $idp = $this->session->userdata['idposyandu'];
         $data['posyandu'] = $this->db->where('idposyandu', $idp)->get('tbposyandu')->row_array();
-        $data['beritaacara'] = $this->Kegiatan_model->getBulanIni($th, $bl, $idp);
-        if ($data['beritaacara'] == NULL) {
-            $this->session->set_flashdata("gagal", "Berita Acara Posyandu Bulan ini belum dibuat!");
-            redirect('posyandu/acara');
+
+        if ($id == 0) {
+            $th = date('Y');
+            $bl = date('m');
+
+            $data['beritaacara'] = $this->Kegiatan_model->getBulanIni($th, $bl, $idp);
+            if ($data['beritaacara'] == NULL) {
+                $this->session->set_flashdata("gagal", "Berita Acara Posyandu Bulan ini belum dibuat!");
+                redirect('posyandu/acara');
+            }
+            $idacara = $data['beritaacara'][0]->idacara;
+        } else {
+            $idacara = $id;
+            $data['beritaacara'] = $this->Kegiatan_model->getById($id);
         }
-        $idacara = $data['beritaacara'][0]->idacara;
 
         $data['rekap'] = $this->Pengukuran_model->getRekap($idacara);
 
@@ -222,56 +231,97 @@ extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function skdn()
+    public function skdn($id)
     {
-        $head['title'] = "Rekap Pengukuran - SIPOSYANDU";
+
+        $head['title'] = "SKDN - SIPOSYANDU";
         $data['user'] = $this->session->userdata();
+        $data['tahun'] = $this->db->query("SELECT DISTINCT Year(a.tglacara) as tahun FROM `pengukuran` JOIN beritaacara as a")->result();
+        $data['bulan'] =  $this->db->query("SELECT DISTINCT Month(a.tglacara) as bulan, Monthname(a.tglacara) as nama FROM `pengukuran` JOIN beritaacara as a ORDER BY bulan ASC")->result();
+        $idp = $this->session->userdata['idposyandu'];
+        $data['posyandu'] = $this->db->where('idposyandu', $idp)->get('tbposyandu')->row_array();
+        if ($id == 0) {
+            $th = date('Y');
+            $bl = date('m');
+
+            $data['beritaacara'] = $this->Kegiatan_model->getBulanIni($th, $bl, $idp);
+            if ($data['beritaacara'] == NULL) {
+                $this->session->set_flashdata("gagal", "Berita Acara Posyandu Bulan ini belum dibuat!");
+                redirect('posyandu/acara');
+            }
+            $idacara = $data['beritaacara'][0]->idacara;
+        } else $idacara = $id;
+
+        $data['header'] = $this->Kegiatan_model->getHeaderSKDN($idacara);
+        $data['bgm'] = $this->Pengukuran_model->getBalitaBGM($idacara);
+        $data['asie'] = $this->Pengukuran_model->getBalitaASI($idacara);
 
         $data["uraian"] = [
             [
-                "id" => 1,
-                "label" => "Uraian 1"
+                "id" => $idacara,
+                "label" => "Jumlah balita yang ada di Posyandu (S)**",
+                "wer" => [TRUE => TRUE]
             ],
             [
-                "id" => 2,
-                "label" => "Uraian 2"
+                "id" => $idacara,
+                "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)",
+                "wer" => ['penduduk.kms' => 1]
             ],
             [
-                "id" => 3,
-                "label" => "Uraian 3"
+                "id" => $idacara,
+                "label" => "Jumlah Balita yang naik timbangannya (N)",
+                "wer" => ['pengukuran.keterangan' => 'N']
             ],
             [
-                "id" => 4,
-                "label" => "Uraian 4"
+                "id" => $idacara,
+                "label" => "Balita yang tidak naik berat badannya bulan ini (T)",
+                "wer" => ['pengukuran.keterangan' => 'T']
             ],
             [
-                "id" => 5,
-                "label" => "Uraian 5"
+                "id" => $idacara,
+                "label" => "Jumlah balita yang bulan ini ditimbang tapi bulan lalu tidak ditimbang (O)",
+                "wer" => ['pengukuran.keterangan' => 'O']
             ],
             [
-                "id" => 6,
-                "label" => "Uraian 6"
+                "id" => $idacara,
+                "label" => "Jumlah balita yang dua kali tidak naik berat badannya bulan ini (2T)",
+                "wer" => ['pengukuran.keterangan' => '2T']
             ],
             [
-                "id" => 7,
-                "label" => "Uraian 7"
+                "id" => $idacara,
+                "label" => "Jumlah balita yang baru ditimbang bulan ini (B)",
+                "wer" => ['pengukuran.keterangan' => 'B']
             ],
             [
-                "id" => 8,
-                "label" => "Uraian 8"
+                "id" => $idacara,
+                "label" => "Jumlah balita yang ditimbang bulan ini (D)",
+                "wer" => [TRUE => TRUE]
             ],
             [
-                "id" => 9,
-                "label" => "Uraian 9"
+                "id" => $idacara,
+                "label" => "Jumlah balita Garis Merah (BGM)",
+                "wer" => ['pengukuran.keterangan' => 'BGM']
             ],
             [
-                "id" => 10,
-                "label" => "Uraian 10"
+                "id" => $idacara,
+                "label" => "Jumlah balita mendapat kapsul vitamin A",
+                "wer" => ['pengukuran.vitamina' => 1]
             ],
             [
-                "id" => 11,
-                "label" => "Uraian 11"
+                "id" => $idacara,
+                "label" => "Jumlah bayi yang diberikan ASI Ekslusif",
+                "wer" => ['pengukuran.asi' => 1]
             ],
+        ];
+        $data['kelamin'] = [
+            [
+                "id"   => 'L',
+                "wer" => ['penduduk.kelamin' => 'L']
+            ],
+            [
+                "id"   => 'P',
+                "wer" => ['penduduk.kelamin' => 'P']
+            ]
         ];
 
         $data["umur"] = [
@@ -302,13 +352,19 @@ extends CI_Controller
         ];
 
         $data["pengecualian"] = [
-            "10" => [ 1 ],
-            "11" => [ 2, 3, 4],
+            "10" => [1],
+            "11" => [2, 3, 4],
         ];
 
         $this->load->view('template/header', $head);
         $this->load->view('template/sidebar', $data);
         $this->load->view('posyandu/skdn', $data);
         $this->load->view('template/footer');
+    }
+    public function tes()
+    {
+        $id = 3;
+        $data = $this->Kegiatan_model->getHeaderSKDN($id);
+        var_dump($data);
     }
 }

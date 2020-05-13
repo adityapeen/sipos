@@ -11,6 +11,7 @@ extends CI_Controller
         $this->load->model('pengukuran_model');
         $this->load->model('kegiatan_model');
         $this->load->model('admin_model');
+        $this->load->model('puskesmas_model');
     }
     function searchAyah()
     {
@@ -40,6 +41,20 @@ extends CI_Controller
             }
         }
     }
+    function searchKader()
+    {
+        if (isset($_GET['term']) && isset($_GET['idp'])) {
+            $result = $this->admin_model->getKader($_GET['term'], $_GET['idp']);
+            if (count($result) > 0) {
+                foreach ($result as $row)
+                    $arr_result[] = array(
+                        'label'  => $row->nama,
+                        'nik'   => $row->nik,
+                    );
+                echo json_encode($arr_result);
+            }
+        }
+    }
     function searchKab()
     {
         if (isset($_GET['term'])) {
@@ -54,7 +69,15 @@ extends CI_Controller
             }
         }
     }
-
+    function getDetailAcara()
+    {
+        if (isset($_GET['idacara'])) {
+            $result = $this->kegiatan_model->getById($_GET['idacara']);
+            if (count($result) > 0) {
+                echo json_encode($result);
+            }
+        }
+    }
     function getIdUkuran()
     {
         if (isset($_GET['nik']) && isset($_GET['idacara'])) {
@@ -141,48 +164,107 @@ extends CI_Controller
         }
     }
 
+    function getBGM()
+    {
+        if (isset($_GET['umur'])) {
+            $result = $this->db->get_where('berat', ['umur' => $_GET['umur']])->result();
+            if ($result) echo json_encode($result);
+        }
+    }
+
     function getKet()
     {
-        if (isset($_GET['nik']) && isset($_GET['berat']) && isset($_GET['umur'])) {
+        if (isset($_GET['nik']) && isset($_GET['berat']) && isset($_GET['umur']) && isset($_GET['kelamin'])) {
             $beratskr = $_GET['berat'];
-            $umur = $_GET['umur'];
-            $res = array('ket' => '', 'umur' => '', 'beratlalu' => '', 'angka' => '');
-            $res['umur'] = $_GET['umur']; //Bisa dihapus
+            $umur = round($_GET['umur']);
+            $kelamin = $_GET['kelamin'];
+            $res = array('ket' => '', 'umur' => $umur, 'beratlalu' => '', 'angka' => '');
             $v = 'T';
-            $result = $this->pengukuran_model->getKet($_GET['nik'], $_GET['berat']);
-            if ($result) { //jika timbangan bulan lalu ditemukan
-                $beratlalu = $result['berat'];
-                $ketlalu = $result['keterangan'];
-                $res['beratlalu'] = $beratlalu; //Bisa dihapus
-                $res['ketlalu'] = $ketlalu; //Bisa dihapus
+            $result = $this->pengukuran_model->getKet($_GET['nik']);
+            //CEK BGM
+            $berat = $this->db->get_where('berat', ['umur' => $umur])->row_array();
+            if ($kelamin == 'L') {
+                $bgm = $berat['garis_merah_l'];
+                $kenaikan = $berat['kenaikan_l'];
+            } else {
+                $bgm = $berat['garis_merah_p'];
+                $kenaikan = $berat['kenaikan_p'];
+            }
+            if ($beratskr < $bgm) $v = 'BGM';
+            else {
+                if (!$this->db->get_where('pengukuran', ['nik' => $_GET['nik']])->result())
+                    $v = "B"; //jika belum pernah menimbang
+                else if ($result) { //jika timbangan bulan lalu ditemukan
+                    $beratlalu = $result['berat'];
+                    $ketlalu = $result['keterangan'];
+                    $res['beratlalu'] = $beratlalu; //Bisa dihapus
+                    $res['ketlalu'] = $ketlalu; //Bisa dihapus
 
-                if ($beratskr > $beratlalu) {
-                    $interval = round($beratskr - $beratlalu, 2);
-                    $res['interval'] = $interval; //Bisa Dihapus
-                    if ($umur < 2 && $interval > 0.8) $v = "N";
-                    else if ($umur < 3 && $interval >= 0.9) $v = "N";
-                    else if ($umur < 4 && $interval >= 0.8) $v = "N";
-                    else if ($umur < 5 && $interval >= 0.6) $v = "N";
-                    else if ($umur < 6 && $interval >= 0.5) $v = "N";
-                    else if ($umur < 8 && $interval >= 0.4) $v = "N";
-                    else if ($umur < 12 && $interval >= 0.3) $v = "N";
-                    else if ($umur < 61 && $interval >= 0.2) $v = "N";
-                    else $v = "T";
-                }
-                if ($v == 'T') {
-                    if (strlen($ketlalu) == 2) {
-                        $angka = substr($ketlalu, 0, 1);
-                        $res['angka'] = $angka;
-                        $v = $angka + 1 . "T";
-                    } else if ($ketlalu == 'T') $v = '2T';
-                }
-            } else $v = "O"; //jika tidak ada timbangan bulan lalu
-
+                    if ($beratskr > $beratlalu) {
+                        $interval = round($beratskr - $beratlalu, 2);
+                        $res['interval'] = $interval; //Bisa Dihapus
+                        if ($interval >= $kenaikan) $v = "N";
+                        else $v = "T";
+                    }
+                    if ($v == 'T') {
+                        if (strlen($ketlalu) == 2) {
+                            $angka = substr($ketlalu, 0, 1);
+                            $res['angka'] = $angka;
+                            $v = $angka + 1 . "T";
+                        } else if ($ketlalu == 'T') $v = '2T';
+                    }
+                } else $v = "O"; //jika tidak ada timbangan bulan lalu
+            }
             //$res['ket'] = $beratskr-$_GET['berat'];
             $res['ket'] = $v;
             echo json_encode($res);
         }
     }
+
+    // function getKeterangan()
+    // {
+    //     if (isset($_GET['nik']) && isset($_GET['berat']) && isset($_GET['umur'])) {
+    //         $beratskr = $_GET['berat'];
+    //         $umur = $_GET['umur'];
+    //         $res = array('ket' => '', 'umur' => '', 'beratlalu' => '', 'angka' => '');
+    //         $res['umur'] = $_GET['umur']; //Bisa dihapus
+    //         $v = 'T';
+    //         $result = $this->pengukuran_model->getKet($_GET['nik'], $_GET['berat']);
+    //         if (!$this->db->get_where('pengukuran', ['nik' => $_GET['nik']])->result())
+    //             $v = "B"; //jika belum pernah menimbang
+    //         else if ($result) { //jika timbangan bulan lalu ditemukan
+    //             $beratlalu = $result['berat'];
+    //             $ketlalu = $result['keterangan'];
+    //             $res['beratlalu'] = $beratlalu; //Bisa dihapus
+    //             $res['ketlalu'] = $ketlalu; //Bisa dihapus
+
+    //             if ($beratskr > $beratlalu) {
+    //                 $interval = round($beratskr - $beratlalu, 2);
+    //                 $res['interval'] = $interval; //Bisa Dihapus
+    //                 if ($umur < 2 && $interval > 0.8) $v = "N";
+    //                 else if ($umur < 3 && $interval >= 0.9) $v = "N";
+    //                 else if ($umur < 4 && $interval >= 0.8) $v = "N";
+    //                 else if ($umur < 5 && $interval >= 0.6) $v = "N";
+    //                 else if ($umur < 6 && $interval >= 0.5) $v = "N";
+    //                 else if ($umur < 8 && $interval >= 0.4) $v = "N";
+    //                 else if ($umur < 12 && $interval >= 0.3) $v = "N";
+    //                 else if ($umur < 61 && $interval >= 0.2) $v = "N";
+    //                 else $v = "T";
+    //             }
+    //             if ($v == 'T') {
+    //                 if (strlen($ketlalu) == 2) {
+    //                     $angka = substr($ketlalu, 0, 1);
+    //                     $res['angka'] = $angka;
+    //                     $v = $angka + 1 . "T";
+    //                 } else if ($ketlalu == 'T') $v = '2T';
+    //             }
+    //         } else $v = "O"; //jika tidak ada timbangan bulan lalu
+
+    //         //$res['ket'] = $beratskr-$_GET['berat'];
+    //         $res['ket'] = $v;
+    //         echo json_encode($res);
+    //     }
+    // }
 
     function getallprov()
     {
@@ -310,6 +392,15 @@ extends CI_Controller
         if (isset($_GET['id'])) {
             $res = $this->admin_model->getPosyanduDaerah($_GET['id']);
             if ($res > 0) {
+                echo json_encode($res);
+            }
+        }
+    }
+    function getListOverview()
+    {
+        if (isset($_GET['idp']) && isset($_GET['ket']) && isset($_GET['th']) && isset($_GET['bl'])) {
+            $res = $this->puskesmas_model->getListRinci($_GET['idp'], $_GET['ket'], $_GET['th'], $_GET['bl']);
+            if ($res) {
                 echo json_encode($res);
             }
         }

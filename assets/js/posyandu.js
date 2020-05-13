@@ -2,9 +2,6 @@ function goBack() {
 	window.history.back();
 }
 
-// function getDataPeserta() {
-//     alert("Hai!");
-// }
 $("#deleteModal").on("show.bs.modal", function (event) {
 	var button = $(event.relatedTarget);
 	var id = button.data("id");
@@ -16,6 +13,7 @@ $("#deleteModal").on("show.bs.modal", function (event) {
 $(document).ready(function () {
 	$("#beritaAcara").DataTable({
 		order: [[0, "desc"]],
+		// columnDefs: [{ width: "200px", targets: 3 }],
 	});
 });
 $(document).ready(function () {
@@ -56,9 +54,15 @@ $(document).ready(function () {
 		searching: true,
 		info: true,
 	});
+	$("#bgmTable").DataTable({
+		ordering: false,
+		paging: false,
+		searching: true,
+		info: true,
+	});
+	$("listOverviewTable").DataTable({
+		ordering: false,
+		paging: false,
+		info: true,
+	});
 });
-// $(document).ready(function() {
-// 	$("#rekapPengukuran").DataTable({
-// 		paging: false
-// 	});
-// });

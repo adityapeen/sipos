@@ -7,7 +7,7 @@ extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata['username'] == "") {
+        if (!isset($this->session->userdata['username']) || $this->session->userdata['username'] == "") {
             redirect('auth');
         }
         if ($this->session->userdata['role_id'] > 2) {
@@ -20,10 +20,37 @@ extends CI_Controller
     }
     public function index()
     {
-        redirect('puskesmas/posyandu');
+        $head['title'] = "Overview - SIPOSYANDU";
+        $data['user'] = $this->session->userdata();
+        $idp = $this->session->userdata['idposyandu'];
+        $data['puskesmas'] = $this->puskesmas_model->getDataPuskesmas($idp);
+        $data['rasio'] = $this->puskesmas_model->getRasioBalita($idp);
+        $th = date('Y');
+        $bl = date('m');
+        $data['overview'] = $this->puskesmas_model->getOverview($idp, $th, $bl);
+
+        $this->load->view('template/header', $head);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('puskesmas/overview', $data);
+        $this->load->view('template/footer');
+        //var_dump($data);
+        // redirect('puskesmas/posyandu');
     }
-    public function list()
+    public function list($ket)
     {
+        $head['title'] = "Detail Overview - SIPOSYANDU";
+        $data['user'] = $this->session->userdata();
+        $idp = $this->session->userdata['idposyandu'];
+        $data['puskesmas'] = $this->puskesmas_model->getDataPuskesmas($idp);
+        $th = date('Y');
+        $bl = date('m');
+        $data['list'] = $this->puskesmas_model->getTimbanganRinci($idp, $ket, $th, $bl);
+        $data['tipe'] = $ket;
+
+        $this->load->view('template/header', $head);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('puskesmas/detailoverview', $data);
+        $this->load->view('template/footer');
     }
     public function userlist()
     {
@@ -78,6 +105,24 @@ extends CI_Controller
         $this->load->view('puskesmas/posyandu', $data);
         $this->load->view('template/footer');
     }
+    public function bgm()
+    {
+        $head['title'] = "BGM - SIPOSYANDU";
+        $data['user'] = $this->session->userdata();
+        $idp = $this->session->userdata['idposyandu'];
+        $data['bgm'] = $this->puskesmas_model->getBGM();
+
+        $this->load->view('template/header', $head);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('puskesmas/bgm', $data);
+        $this->load->view('template/footer');
+    }
+    public function updatebgm()
+    {
+        if ($this->puskesmas_model->updateBGM())
+            $this->session->set_flashdata("sukses", "Data BGM berhasil diubah");
+        redirect('puskesmas/bgm');
+    }
     public function detailposyandu($idp)
     {
 
@@ -129,5 +174,12 @@ extends CI_Controller
         $this->load->view('template/sidebar', $data);
         $this->load->view('user/penduduk', $data);
         $this->load->view('template/footer');
+    }
+    public function tes()
+    {
+        $idpus = 1;
+        $ket = 'BGM';
+        $data = $this->puskesmas_model->getTimbangan($idpus, $ket, 2020, 5);
+        var_dump($data);
     }
 }

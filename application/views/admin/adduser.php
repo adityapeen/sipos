@@ -7,7 +7,7 @@
                     Lihat Daftar Penduduk berdasarkan lokasi
                 </div>
                 <div class="card-body form-inline">
-                    <div class="row md-12 col-sm-12 mb-1">
+                    <div class="row md-12 col-sm-12 mb-1 justify-content-center">
                         <select class="form-group form-control" id="selProv">
                             <option value=""></option>
                         </select>
@@ -208,7 +208,7 @@
     };
 
     $('#addUserModal').on('show.bs.modal', function(event) {
-        var id = $(event.relatedTarget).data('id');
+        var nik = $(event.relatedTarget).data('id');
         $('#unitkerja').empty();
 
         $.getJSON("<?= base_url('api/getdatapenduduk'); ?>", {

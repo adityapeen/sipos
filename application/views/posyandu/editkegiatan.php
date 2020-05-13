@@ -33,7 +33,7 @@
                                     <div class="form-group">
                                         <label>Pemateri</label>
                                         <input type="text" id="pemateri" class="form-control" placeholder="Pemateri" value="<?= $a->pemateri; ?>">
-                                        <input type="hidden" name="pemateri" value="<?= $a->nikpem; ?>">
+                                        <input type="hidden" id="nikpem" name="pemateri" value="<?= $a->nikpem; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-6 pr-1">
@@ -76,3 +76,17 @@
 
 </div>
 <!-- End of Main Content -->
+
+<script>
+    $(document).ready(function() {
+        $('#pemateri').autocomplete({
+            minLength: 1,
+            source: "<?php echo site_url('api/searchkader/?idp=') . $user['idposyandu']; ?>",
+
+            select: function(event, ui) {
+                $('#pemateri').val(ui.item.label);
+                $('#nikpem').val(ui.item.nik);
+            }
+        });
+    })
+</script>

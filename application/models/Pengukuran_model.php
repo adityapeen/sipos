@@ -168,8 +168,35 @@ class Pengukuran_model extends CI_Model
 
     public function getSkdn($idacara)
     {
-        $this->db->query("SELECT COUNT(p.idpengukuran) as bayi FROM pengukuran as p JOIN beritaacara as acara ON p.idacara = acara.idacara JOIN penduduk as anak ON p.nik = anak.nik WHERE CEIL(DATEDIFF(acara.tglacara, anak.tgllahir)/30.40) <= 5 AND p.idacara = $idacara AND anak.kelamin ='L'");
-        return $this->db->get()->result();
+        $result = [
+            'uraian' => '',
+            'data' => ''
+        ];
+        $result['uraian'] = [
+            'Jumlah balita yang ada di Posyandu (S)' => '',
+            'Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)' => '',
+            'Jumlah Balita yang naik timbangannya (N)' => '',
+            'Balita yang tidak naik berat badannya bulan ini (T)'  => '',
+            'Jumlah balita yang bulan ini ditimbang tapi bulan lalu tidak ditimbang (O)' => '',
+            'Jumlah balita yang dua kali tidak naik berat badannya bulan ini (2T)' => '',
+            'Jumlah balita yang baru ditimbang bulan ini (B)' => '',
+            'Jumlah balita yang ditimbang bulan ini (D)' => '',
+            'Jumlah balita Garis Merah (BGM)' => '',
+            'Jumlah balita mendapat kapsul vitamin A' => '',
+            'Jumlah bayi yang diberikan ASI Ekslusif' => ''
+        ];
+        $result['data'] = [
+            'laki-laki' => '',
+            'perempuan' => ''
+        ];
+        // for ($i = 0; $i < 11; $i++) {
+        //     $result['no'] = $i;
+        //     $result['uraian'] = $uraian[$i];
+        // }
+        //array_push($result, $uraian);
+
+        //$this->db->query("SELECT COUNT(p.idpengukuran) as bayi FROM pengukuran as p JOIN beritaacara as acara ON p.idacara = acara.idacara JOIN penduduk as anak ON p.nik = anak.nik WHERE CEIL(DATEDIFF(acara.tglacara, anak.tgllahir)/30.40) <= 5 AND p.idacara = $idacara AND anak.kelamin ='L'");
+        return $result;
     }
 
     public function getStat($nik)
@@ -184,7 +211,7 @@ class Pengukuran_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function getKet($nik, $berat)
+    public function getKet($nik)
     {
         $this->db->select('berat, keterangan');
         $this->db->from($this->_table . ' as p');
@@ -195,6 +222,34 @@ class Pengukuran_model extends CI_Model
         $this->db->order_by('idpengukuran', 'desc');
         $this->db->limit(1);
         return $this->db->get()->row_array();
+    }
+    public function checkBeritaAcara($id)
+    {
+        return $this->db->get_where($this->_table, ['idacara' => $id])->result();
+    }
+    public function getBalitaBGM($id)
+    {
+        $this->db->select('anak.nama as nama, ibu.nama as ibu, ayah.nama as ayah, anak.tgllahir, anak.kelamin, p.berat, p.tinggi, (DATEDIFF(acara.tglacara, anak.tgllahir)/30.40) as umur ')
+            ->from($this->_table . ' p')
+            ->join('beritaacara as acara', 'p.idacara = acara.idacara', 'left')
+            ->join('penduduk as anak', 'p.nik = anak.nik', 'left')
+            ->join('penduduk as ibu', 'anak.ibu = ibu.nik', 'left')
+            ->join('penduduk as ayah', 'anak.ayah = ayah.nik', 'left')
+            ->where('p.idacara', $id)
+            ->where('p.keterangan', 'BGM');
+        return $this->db->get()->result();
+    }
+    public function getBalitaASI($id)
+    {
+        $this->db->select('anak.nama as nama, ibu.nama as ibu, ayah.nama as ayah, anak.tgllahir, anak.kelamin, p.berat, p.tinggi, (DATEDIFF(acara.tglacara, anak.tgllahir)/30.40) as umur ')
+            ->from($this->_table . ' p')
+            ->join('beritaacara as acara', 'p.idacara = acara.idacara', 'left')
+            ->join('penduduk as anak', 'p.nik = anak.nik', 'left')
+            ->join('penduduk as ibu', 'anak.ibu = ibu.nik', 'left')
+            ->join('penduduk as ayah', 'anak.ayah = ayah.nik', 'left')
+            ->where('p.idacara', $id)
+            ->where('p.asi', '1');
+        return $this->db->get()->result();
     }
 }
 

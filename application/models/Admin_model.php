@@ -331,4 +331,13 @@ class Admin_model extends CI_Model
         $this->db->where('username', $username);
         return $this->db->get()->result();
     }
+    public function getKader($nama, $idp)
+    {
+        $this->db->like('nama', $nama, 'both')
+            ->where('unitkerja', $idp)
+            ->where('role_id', 3)
+            ->where('aktif', 1)
+            ->limit(10);
+        return $this->db->get('user')->result();
+    }
 }

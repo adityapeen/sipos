@@ -2,7 +2,8 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Data Penduduk</h1>
+    <h1 class="h3 mb-4 text-gray-800"><i class="fas fa-address-card text-primary"></i> Data Penduduk</h1>
+
     <?php if ($this->session->flashdata('sukses')) {
     ?>
         <div class="col-lg-12 mb-4">
