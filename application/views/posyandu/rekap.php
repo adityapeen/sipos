@@ -1,25 +1,27 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
-    <div class="form-row justify-content-center">
+    <div class="row justify-content-center">
         <div class="card md-8 mb-2">
-            <div class="form-inline">
-                <div class="col"><label> Lihat Rekap Posyandu </label></div>
-                <div class="col">
-                    <select class="form-control" id="tahun" name="tahun">
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <label>Lihat Rekap Posyandu</label>
+                </div>
+
+
+                <div class="form-inline">
+                    <select class="form-control mb-1 mr-1" id="tahun" name="tahun">
                         <?php foreach ($tahun as $t) { ?>
                             <option <?php if ($t->tahun == date('Y')) echo "selected"; ?> value="<?= $t->tahun; ?>"><?= $t->tahun; ?></option>
                         <?php } ?>
                     </select>
-                </div>
-                <div class="col">
-                    <select class="form-control" id="bulan" name="bulan">
+                    <select class="form-control mb-1" id="bulan" name="bulan">
                         <?php foreach ($bulan as $b) { ?>
                             <option <?php if ($b->nama == date('F')) echo "selected"; ?> value="<?= $b->bulan; ?>"><?= $b->nama; ?></option>
                         <?php } ?>
                     </select>
+                    <div class="col mb-1 p-1"><button class="btn btn-block btn-success" id="getRekap">Cari</button></div>
+                    <div class="col mb-1 p-1"><button class="btn btn-block btn-info" id="printRekap">PDF</button></div>
                 </div>
-                <div class="col"><button class="btn btn-block btn-success" id="getRekap">Cari</button></div>
-                <div class="col"><button class="btn btn-block btn-info" id="printRekap">Print</button></div>
             </div>
         </div>
     </div>
@@ -28,7 +30,7 @@
             &nbsp; &nbsp;Tahun <?= date('Y', strtotime($beritaacara[0]->tglacara)); ?></b></p>
     <div class="table-responsive2">
         <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-            <div class="row">
+            <div class="row-no-gutter">
                 <div class="col">
                     <table class="table table-bordered dataTable hover compact" id="rekapPengukuran" cellspacing="0" role="grid" aria-describedby="dataTable_info">
                         <thead class="text-center">
@@ -99,6 +101,7 @@
         <input type="hidden" id="pbulan" name="bulan">
     </form>
 </div>
+</div>
 
 <script>
     $('#getRekap').click(function() {
@@ -114,7 +117,8 @@
                 $('#rekapPengukuran').dataTable({
                     destroy: true,
                     paging: false,
-                    searching: false
+                    searching: false,
+                    info: false
                 }).fnClearTable();
                 var num = 1;
                 var e = JSON.parse(data);

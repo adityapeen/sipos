@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Import Excel CodeIgniter</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container" style="margin-top: 100px">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <?php echo $this->session->flashdata('sukses') ?>
+                <?php echo $this->session->flashdata('gagal') ?>
+                <form method="POST" action="<?php echo base_url('excel/upload') ?>" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">UNGGAH FILE EXCEL</label>
+                        <input type="file" name="userfile" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label> ID Posyandu</label>
+                        <input type="number" class="form-control" name="idposyandu">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">UPLOAD</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

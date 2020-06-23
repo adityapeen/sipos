@@ -14,7 +14,7 @@
         </div>
         <div class="table-responsive2 mb-3">
             <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                <div class="row">
+                <div class="row-no-gutter">
                     <div class="col-sm-12">
                         <table class="table table-bordered dataTable hover compact" id="rekapPengukuran" cellspacing="0" role="grid" aria-describedby="dataTable_info">
                             <thead class="text-center align-middle">
@@ -38,11 +38,37 @@
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 75px;">Total</th>
                                 </tr>
                             </thead>
-
                             <tbody>
+                                <!-- Baris pertama manual karena sql beda sendiri -->
+                                <tr role="row">
+                                    <td class="text-center">1</td>
+                                    <td>Jumlah balita yang ada di Posyandu (S)</td>
+                                    <?php
+                                    $totalSemua = 0;
+                                    foreach ($kelamin as $kel) {
+                                        $totalTemp = 0;
+                                        foreach ($umur as $item2) {
+                                            $count = $this->db->select("count(penduduk.nik) AS jumlah")
+                                                ->from("penduduk")
+                                                ->where("ROUND(DATEDIFF('" . $header[4]['data'] . "', penduduk.tgllahir)/30.40) >=", $item2["min"])
+                                                ->where("ROUND(DATEDIFF('" . $header[4]['data'] . "', penduduk.tgllahir)/30.40) <=", $item2["max"])
+                                                ->where('idposyandu', $posyandu['idposyandu'])
+                                                ->where($kel['wer'])
+                                                ->get()->first_row();
+                                            $totalTemp = $totalTemp + $count->jumlah;
+                                            echo "<td class=\"text-center\">" . $count->jumlah . "</td>";
+                                        }
+                                        echo "<td class=\"text-center\">" . $totalTemp . "</td>";
+                                        $totalSemua += $totalTemp;
+                                    }
+                                    ?>
+                                    <td class="text-center"><?= $totalSemua ?></td>
+                                </tr>
+
+                                <!-- Perulangan baris 2-11 -->
                                 <?php foreach ($uraian as $item1) { ?>
                                     <tr role="row">
-                                        <td class="text-center"><?= 1 + @$number++ ?></td>
+                                        <td class="text-center"><?= 2 + @$number++ ?></td>
                                         <td><?= $item1["label"] ?></td>
                                         <?php
                                         $totalSemua = 0;
@@ -75,32 +101,6 @@
                                             }
                                             $totalSemua += $totalTemp;
                                         }
-
-                                        // $totalPerempuan = 0;
-                                        // foreach ($umur as $item2) {
-                                        //     $count = $this->db->select("count(pengukuran.idpengukuran) AS jumlah")
-                                        //         ->from("pengukuran")
-                                        //         ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
-                                        //         ->join("penduduk", "penduduk.nik=pengukuran.nik")
-                                        //         ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
-                                        //         ->where("CEIL(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
-                                        //         ->where("pengukuran.idacara =", $item1["id"])
-                                        //         ->where("penduduk.kelamin =", "P")
-                                        //         ->get()->first_row();
-                                        //     $totalPerempuan = $totalPerempuan + $count->jumlah;
-
-                                        //     if (is_array(@$pengecualian[$item1["id"]]) && in_array($item2["id"], $pengecualian[$item1["id"]])) {
-                                        //         echo "<td style=\"background-color: #23384E\"></td>";
-                                        //     } else {
-                                        //         echo "<td class=\"text-center\">" . $count->jumlah . "</td>";
-                                        //     }
-                                        // }
-
-                                        // if ($item1["id"] === 11) {
-                                        //     echo "<td style=\"background-color: #23384E\"></td>";
-                                        // } else {
-                                        //     echo "<td class=\"text-center\">" . $totalPerempuan . "</td>";
-                                        // } 
                                         ?>
 
                                         <td class="text-center"><?= $totalSemua ?></td>
@@ -121,14 +121,14 @@
 
         <div class="table-responsive2 mb-3">
             <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                <div class="row">
+                <div class="row-no-gutter">
                     <div class="col-sm-12">
                         <table class="table table-bordered dataTable hover compact" id="rekapPengukuran" cellspacing="0" role="grid" aria-describedby="dataTable_info">
                             <thead class="text-center align-middle">
                                 <tr role="row">
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 20px;">No</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1">Nama Bayi</th>
-                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1">Nama Orangtua</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 250px;">Nama Orangtua</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 120px;">Tanggal Lahir</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 100px;">Jenis Kelamin</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="2" colspan="1" style="width: 75px;">BB (kg)</th>
@@ -175,17 +175,17 @@
 
         <div class="table-responsive2 mb-3">
             <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                <div class="row">
+                <div class="row-no-gutter">
                     <div class="col-sm-12">
                         <table class="table table-bordered dataTable hover compact" id="rekapPengukuran" cellspacing="0" role="grid" aria-describedby="dataTable_info">
                             <thead class="text-center align-middle">
                                 <tr role="row">
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 20px;">No</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1">Nama Balita</th>
-                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1">Nama Orangtua</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 250px;">Nama Orangtua</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 120px;">Tanggal Lahir</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 100px;">Jenis Kelamin</th>
-                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1">Umur</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 75px;">Umur</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 75px;">BB (kg)</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 75px;">PB (cm)</th>
                                 </tr>

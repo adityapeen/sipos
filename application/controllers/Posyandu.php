@@ -256,15 +256,23 @@ extends CI_Controller
         $data['bgm'] = $this->Pengukuran_model->getBalitaBGM($idacara);
         $data['asie'] = $this->Pengukuran_model->getBalitaASI($idacara);
 
-        $data["uraian"] = [
+        $data['urai'] = [
             [
                 "id" => $idacara,
-                "label" => "Jumlah balita yang ada di Posyandu (S)**",
+                "label" => "Jumlah balita yang ada di Posyandu (S)",
                 "wer" => [TRUE => TRUE]
             ],
             [
                 "id" => $idacara,
-                "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)",
+                "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)**",
+                "wer" => ['penduduk.kms' => 1]
+            ],
+        ];
+
+        $data["uraian"] = [
+            [
+                "id" => $idacara,
+                "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)**",
                 "wer" => ['penduduk.kms' => 1]
             ],
             [

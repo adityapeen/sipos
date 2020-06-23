@@ -15,13 +15,6 @@ extends CI_Controller
     }
     public function index()
     {
-        if ($this->session->userdata['nama'] == "") {
-            redirect('auth');
-        }
-
-
-        // echo "Selamat datang! " . $this->session->userdata['nama'];
-        // echo "Selamat datang! " . $this->session->userdata['username'];
         $username = $this->session->userdata['username'];
         $user = $this->db->select('user.username, user.nama, user_role.role, tbposyandu.namaposyandu as posyandu')
             ->select('user.date_created, user.image')
@@ -29,7 +22,7 @@ extends CI_Controller
             ->join('tbposyandu', 'user.unitkerja = tbposyandu.idposyandu')
             ->get_where('user', ['username' => $username])->row_array();
         $data['user'] = $user;
-        $data['title'] = "SIPOSYANDU";
+        $data['title'] = "User Info - SIPOSYANDU";
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
@@ -129,30 +122,35 @@ extends CI_Controller
         $this->load->view('template/footer');
     }
 
-
-
-
-    //Some Borderline
-
-    function get_autocomplete()
+    public function uploadpicture()
     {
-        if (isset($_GET['term'])) {
-            $result = $this->penduduk_model->getAyah($_GET['term']);
-            if (count($result) > 0) {
-                foreach ($result as $row) {
-                    $arr_result[] = array(
-                        'nama' => $row->nama,
-                        'nik' => $row->nik,
-                    );
-                }
+        $direktori = './assets/img/profile/';
+        $uname = $this->input->post('uname');
+        $config['upload_path'] = realpath($direktori);
+        $config['allowed_types'] = 'jpg|jpeg|png';
+        $config['max_size'] = '10000';
+        $config['encrypt_name'] = false;
+        $config['file_name'] = $uname . '.jpg';
 
-                echo json_encode($arr_result);
-            }
+        if (realpath($direktori . $uname . '.jpg')) { //Check and Delete existing image
+            unlink(realpath($direktori . $uname . '.jpg'));
+            echo 'Existing picture deleted<br>';
         }
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload()) { //upload gagal
+            $this->session->set_flashdata('gagal', 'Gambar Gagal diupload' . $this->upload->display_errors());
+            echo $this->upload->display_errors();
+        } else {
+            $this->session->set_flashdata('sukses', 'Foto Akun berhasil diperbarui');
+            $this->db->update('user', ['image' => $this->upload->data('file_name')], ['username' => $uname]);
+            echo "Sukses upload & Update DB";
+        }
+        redirect('user');
     }
-
-    public function auto()
+    public function resetpicture()
     {
-        $this->load->view('autocomplete2');
+        $this->db->update('user', ['image' => 'default.jpg'], ['username' => $this->input->post('id')]);
+        $this->session->set_flashdata('sukses', 'Foto Akun berhasil direset');
+        redirect('user');
     }
 }

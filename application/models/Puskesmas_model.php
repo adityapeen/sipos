@@ -39,6 +39,15 @@ class Puskesmas_model extends CI_Model
         $this->db->where('pus.idpuskesmas', $idpus['id']);
         return $this->db->get('tbposyandu as pos')->result();
     }
+    public function getDesaLokal($idp)
+    {
+        $idpus = $this->_getIDpuskesmas($idp)['id'];
+        $this->db->select('tbdesa.iddesa, tbdesa.nama')
+            ->from('tbdesa')
+            ->join('tbpuskesmas', 'tbdesa.idkec = tbpuskesmas.idkec')
+            ->where('tbpuskesmas.idpuskesmas', $idpus);
+        return $this->db->get()->result();
+    }
     public function getDataPosyandu($idp)
     {
         $this->db->select('pos.idposyandu as id, pos.namaposyandu as nama, pos.dusun, des.nama as desa');
@@ -178,7 +187,8 @@ class Puskesmas_model extends CI_Model
             ->where('MONTH(beritaacara.tglacara)', $bl)
             ->where('YEAR(beritaacara.tglacara)', $th)
             ->where('beritaacara.idposyandu', $idp)
-            ->where('pengukuran.keterangan', $ket);
+            ->where('pengukuran.keterangan', $ket)
+            ->order_by('umur', 'desc');
         return $this->db->get()->result();
     }
 

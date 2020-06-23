@@ -107,8 +107,8 @@
                                                     <td class="sorting_1"><a href=<?= base_url('posyandu/stat/') . $p->nik; ?>><?= $p->nama; ?></a></td>
                                                     <td><?php if ($p->idpengukuran != "") { ?>
                                                             <!-- <?= base_url('posyandu/pengukuran/edit/' . $p->idpengukuran); ?> -->
-                                                            <a href="#" data-ukuran="<?= $p->idpengukuran; ?>" data-title="Edit" data-toggle="modal" data-target="#timbanganModal" class="btn btn-primary btn-circle btn-sm"><i class="fas fa-edit"></i></a>
-                                                            <a href="#" class="btn btn-danger btn-circle btn-sm" data-id="<?= $p->idpengukuran; ?>" data-act="<?= base_url('posyandu/timbangan/delete'); ?>" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></a>
+                                                            <a href="#" data-ukuran="<?= $p->idpengukuran; ?>" data-title="Edit" data-toggle="modal" data-target="#timbanganModal" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                                            <a href="#" class="btn btn-danger btn-sm" data-id="<?= $p->idpengukuran; ?>" data-act="<?= base_url('posyandu/timbangan/delete'); ?>" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></a>
                                                         <?php } else { ?>
                                                             <a href="#" class="btn btn-success btn-icon-split btn-sm" data-nik="<?= $p->nik; ?>" data-title="Input" data-toggle="modal" data-target="#timbanganModal">
                                                                 <span class="icon text-white-50">

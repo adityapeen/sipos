@@ -67,4 +67,5 @@ $route['puskesmas/peserta/(:any)/(:any)'] = 'Puskesmas/peserta/$1/$2';
 $route['puskesmas/rekap/(:any)'] = 'Posyandu/rekap/$1';
 $route['puskesmas/skdn/(:any)'] = 'Posyandu/skdn/$1';
 $route['puskesmas/adduser/(:any)'] = 'Puskesmas/adduserpos/$1';
+$route['puskesmas/import'] = 'Excel';
 $route['about'] = 'Forbidden/about';

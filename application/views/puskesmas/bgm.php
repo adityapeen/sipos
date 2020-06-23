@@ -56,7 +56,7 @@
                                                 <td><?= $p->garis_merah_l ?> kg</td>
                                                 <td><?= $p->garis_merah_p ?> kg</td>
                                                 <td>
-                                                    <a href="#" class="btn btn-primary btn-circle btn-sm" data-id="<?= $p->umur ?>" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></a>
+                                                    <a href="#" class="btn btn-primary btn-sm" data-id="<?= $p->umur ?>" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></a>
                                                 </td>
                                             </tr>
                                         <?php } ?>

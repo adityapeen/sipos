@@ -25,8 +25,15 @@ extends CI_Controller
         $idp = $this->session->userdata['idposyandu'];
         $data['puskesmas'] = $this->puskesmas_model->getDataPuskesmas($idp);
         $data['rasio'] = $this->puskesmas_model->getRasioBalita($idp);
-        $th = date('Y');
-        $bl = date('m');
+        $data['tahun'] = $this->db->query("SELECT DISTINCT Year(a.tglacara) as tahun FROM `pengukuran` JOIN beritaacara as a")->result();
+        $data['bulan'] =  $this->db->query("SELECT DISTINCT Month(a.tglacara) as bulan, Monthname(a.tglacara) as nama FROM `pengukuran` JOIN beritaacara as a ORDER BY bulan ASC")->result();
+        if ($this->input->post() != null) {
+            $th = $this->input->post('th');
+            $bl = $this->input->post('bl');
+        } else {
+            $th = date('Y');
+            $bl = date('m');
+        }
         $data['overview'] = $this->puskesmas_model->getOverview($idp, $th, $bl);
 
         $this->load->view('template/header', $head);
@@ -36,14 +43,21 @@ extends CI_Controller
         //var_dump($data);
         // redirect('puskesmas/posyandu');
     }
-    public function list($ket)
+    public function list()
     {
         $head['title'] = "Detail Overview - SIPOSYANDU";
         $data['user'] = $this->session->userdata();
         $idp = $this->session->userdata['idposyandu'];
         $data['puskesmas'] = $this->puskesmas_model->getDataPuskesmas($idp);
-        $th = date('Y');
-        $bl = date('m');
+        if ($this->input->post() != null) {
+            $th = $this->input->post('th');
+            $bl = $this->input->post('bl');
+            $ket = $this->input->post('ket');
+        } else {
+            $th = date('Y');
+            $bl = date('m');
+            $ket = 'N';
+        }
         $data['list'] = $this->puskesmas_model->getTimbanganRinci($idp, $ket, $th, $bl);
         $data['tipe'] = $ket;
 
@@ -99,6 +113,7 @@ extends CI_Controller
         $data['user'] = $this->session->userdata();
         $idp = $this->session->userdata['idposyandu'];
         $data['posyandu'] = $this->puskesmas_model->getPosyanduLokal($idp);
+        $data['desa'] = $this->puskesmas_model->getDesaLokal($idp);
 
         $this->load->view('template/header', $head);
         $this->load->view('template/sidebar', $data);

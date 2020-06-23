@@ -50,14 +50,13 @@ class Kegiatan_model extends CI_Model
     public function getById($id)
     {
         $this->db->select('k.idacara, k.idposyandu, a.namaposyandu, k.tglacara, k.judul, k.pemateri, k.notulen as niknot, k.catatan, k.pemateri as nikpem, n.nama as notulen, p.nama as pemateri,')
-            ->select('(SELECT count(idpengukuran) from pengukuran WHERE idacara = k.idacara) as tertimbang');
-        $this->db->from($this->_table . ' as k');
-        $this->db->join('penduduk n', 'k.notulen = n.nik', 'left');
-        $this->db->join('penduduk p', 'k.pemateri = p.nik', 'left');
-        $this->db->join('tbposyandu a', 'k.idposyandu = a.idposyandu');
-        $this->db->where('idacara', $id);
-        $query = $this->db->get()->result();
-        return $query;
+            ->select('a.dusun, (SELECT count(idpengukuran) from pengukuran WHERE idacara = k.idacara) as tertimbang')
+            ->from($this->_table . ' as k')
+            ->join('penduduk n', 'k.notulen = n.nik', 'left')
+            ->join('penduduk p', 'k.pemateri = p.nik', 'left')
+            ->join('tbposyandu a', 'k.idposyandu = a.idposyandu')
+            ->where('idacara', $id);
+        return $this->db->get()->result();
     }
 
     public function save()

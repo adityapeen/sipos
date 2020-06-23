@@ -1,5 +1,16 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
+    <div class="col-lg-12 mb-4">
+        <?php if ($this->session->flashdata('message')) {
+        ?>
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body">
+                    <?= $this->session->flashdata('message'); ?>
+                </div>
+            </div>
+        <?php
+        } ?>
+    </div>
     <div class="row">
         <div class="form-row col-xl-12 col-lg-12 justify-content-center">
             <div class="card shadow mb-4">
@@ -8,13 +19,13 @@
                 </div>
                 <div class="card-body form-inline">
                     <div class="row md-12 col-sm-12 mb-1 justify-content-center">
-                        <select class="form-group form-control" id="selProv">
+                        <select class="form-group form-control mr-1" id="selProv">
                             <option value=""></option>
                         </select>
-                        <select class="form-group form-control" id="selKab">
+                        <select class="form-group form-control mr-1" id="selKab">
                             <option value=""></option>
                         </select>
-                        <select class="form-group form-control" id="selKec">
+                        <select class="form-group form-control mr-1" id="selKec">
                             <option value=""></option>
                         </select>
                         <select class="form-group form-control" id="selDes">
@@ -246,7 +257,6 @@
                 });
         }
     });
-
     $('#password2').focusout(function() {
         var pass1 = $('#password1').val();
         var pass2 = $('#password2').val();

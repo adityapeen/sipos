@@ -66,7 +66,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Daftar User Role</h6>
-                    <a href="#" class="btn btn-primary btn-sm text-white-70 small" data-toggle="modal" data-tipe="addrole" data-target="#MenuModal"><b>Tambah Role</b></a>
+                    <!-- <a href="#" class="btn btn-primary btn-sm text-white-70 small" data-toggle="modal" data-tipe="addrole" data-target="#MenuModal"><b>Tambah Role</b></a> -->
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -87,7 +87,7 @@
                                                     <td><?= $p->role ?></td>
                                                     <td>
                                                         <a href="#" class="btn btn-primary btn-circle btn-sm" data-id="<?= $p->id ?>" data-tipe="editrole" data-toggle="modal" data-target="#MenuModal"><i class="fas fa-edit"></i></a>
-                                                        <a href="#" class="btn btn-danger btn-circle btn-sm" data-id="<?= $p->id ?>" data-tipe="role" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></a>
+                                                        <!-- <a href="#" class="btn btn-danger btn-circle btn-sm" data-id="<?= $p->id ?>" data-tipe="role" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></a> -->
                                                     </td>
                                                 </tr>
                                             <?php } ?>
@@ -214,7 +214,7 @@
             <div class="modal-body">
                 <form method="post" id="formAdd" action="">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="nmmenu" name="nmmenu" placeholder="" value="">
+                        <input type="text" class="form-control" id="nmmenu" name="nmmenu" placeholder="" value="" required>
                     </div>
                     <input type="hidden" id="addtype" name="tipe">
                     <input type="hidden" id="idedit" name="id">

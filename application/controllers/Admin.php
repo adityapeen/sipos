@@ -106,10 +106,12 @@ extends CI_Controller
     }
     public function tambahposyandu()
     {
+        ($this->input->post('addtype') == 'pospus') ? $url = 'puskesmas/posyandu' : $url = 'admin/posyandu';
         if ($this->admin_model->addPosyandu()) {
             $this->session->set_flashdata("sukses", "Posyandu baru berhasil ditambahkan");
         } else $this->session->set_flashdata("gagal", "Puskesmas gagal ditambahkan");
-        redirect('admin/posyandu');
+
+        redirect($url);
     }
     public function tambahpuskesmas()
     {

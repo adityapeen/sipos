@@ -65,4 +65,9 @@ $(document).ready(function () {
 		paging: false,
 		info: true,
 	});
+	$("rekapPengukuran").DataTable({
+		ordering: false,
+		paging: false,
+		info: false,
+	});
 });

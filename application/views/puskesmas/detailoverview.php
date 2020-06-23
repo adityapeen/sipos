@@ -87,23 +87,26 @@
     function getList(id, nama) {
         var head = "Daftar Balita " + nama;
         $('#headList').text(head);
+        <?php ($this->input->post('th') != null) ? $th = $this->input->post('th') : $th = date('Y'); ?>
+        <?php ($this->input->post('bl') != null) ? $bl = $this->input->post('bl') : $th = date('m'); ?>
         $.getJSON("<?= base_url('api/getlistoverview'); ?>", {
                 idp: id,
                 ket: "<?= $tipe; ?>",
-                th: <?= date('Y'); ?>,
-                bl: <?= date('m'); ?>,
+                th: <?= $th; ?>,
+                bl: <?= $bl; ?>,
             })
             .done(function(data) {
                 $('#listTable').dataTable({
                     destroy: true,
                     paging: false,
-                    searching: false
+                    searching: false,
+                    ordering: false,
                 }).fnClearTable();
                 $.each(data, function(idx, e) {
                     $('#listTable').dataTable().fnAddData([
                         e.nama,
-                        e.umur,
-                        e.berat
+                        e.umur + ' bulan',
+                        e.berat + ' kg'
                     ]);
                     //     $('#nama').val(e.nama);
                     //     $('#id').val(e.id);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2020 at 09:33 PM
+-- Generation Time: May 16, 2020 at 07:27 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -41,6 +41,7 @@ CREATE TABLE `berat` (
 --
 
 INSERT INTO `berat` (`umur`, `kenaikan_l`, `kenaikan_p`, `garis_merah_l`, `garis_merah_p`) VALUES
+(0, '0.0', '0.0', '2.50', '2.50'),
 (1, '0.8', '0.8', '2.90', '2.70'),
 (2, '0.9', '0.9', '3.80', '3.40'),
 (3, '0.8', '0.8', '4.40', '4.00'),
@@ -127,7 +128,11 @@ INSERT INTO `beritaacara` (`idacara`, `tglacara`, `idposyandu`, `judul`, `pemate
 (2, '2020-01-05', 1, 'Posyandu Bulan Januari', NULL, '3403010505980001', NULL),
 (3, '2020-02-05', 1, 'Posyandu Bulan Februari', NULL, '3403010505980001', NULL),
 (22, '2020-03-04', 1, 'Maret 2020', NULL, '3403010505980001', NULL),
-(23, '2020-04-05', 1, 'April', NULL, '3403010505980001', 'Mari Mencoba Semuanya');
+(23, '2020-04-05', 1, 'April', NULL, '3403010505980001', 'Mari Mencoba Semuanya'),
+(31, '2020-05-04', 1, NULL, NULL, '3403010505980001', NULL),
+(32, '2020-05-13', 6, NULL, NULL, '3403010505980001', NULL),
+(33, '2020-05-13', 7, NULL, NULL, '3403010505980001', NULL),
+(34, '2020-05-13', 8, NULL, NULL, '3403010505980001', NULL);
 
 -- --------------------------------------------------------
 
@@ -156,6 +161,15 @@ CREATE TABLE `penduduk` (
 --
 
 INSERT INTO `penduduk` (`nik`, `nama`, `kelamin`, `tempatlahir`, `tgllahir`, `alamat`, `pekerjaan`, `agama`, `ibu`, `ayah`, `idposyandu`, `kms`, `statusbantuan`) VALUES
+('111206', 'Mey Mey', 'P', 5, '2018-05-10', NULL, NULL, 'Islam', '3403085', NULL, 8, 0, 'KIN'),
+('111207', 'Upin', 'L', 5, '2019-07-06', NULL, NULL, 'Islam', NULL, '3403078', 8, 1, 'NON'),
+('111208', 'Ipin', 'L', 5, '2019-07-06', NULL, NULL, 'Islam', NULL, NULL, 8, 1, 'KIN'),
+('121202', 'Susanti', 'P', 5, '2018-05-10', 'RT 02', NULL, 'Islam', '3403085', NULL, 6, 0, 'KIN'),
+('121203', 'Fizi', 'L', 5, '2019-07-06', NULL, NULL, 'Islam', NULL, '3403078', 6, 1, 'NON'),
+('121204', 'Ehsan', 'L', NULL, '2019-07-06', NULL, NULL, 'Islam', NULL, NULL, 6, 1, 'KIN'),
+('2345283', 'Adek 4', 'P', 5, '2020-03-10', '', '', 'Islam', NULL, NULL, 7, 1, 'KIN'),
+('2836408235', 'Adek 6', 'L', 5, '2020-02-12', '', '', 'Islam', NULL, NULL, 8, 1, 'NON'),
+('2938658923', 'Adek 3', 'L', 3, '2018-07-10', '', '', 'Islam', NULL, NULL, 7, 1, 'NON'),
 ('3403010105720002', 'Sri Mulyani Murni Astuti', 'P', 3, '1972-05-01', 'Kemorosari II, RT08/RW07', 'PNS', 'Islam', '3403010105720002', '3403011009670001', 2, 0, 'Tidak Ada'),
 ('3403010505980001', 'Aditya Pratama Nugraha', 'L', 3, '1998-05-05', 'Kemorosari II, RT08, RW07', 'Mahasiswa', 'Islam', NULL, NULL, 2, 0, 'Tidak Ada'),
 ('3403011', 'Rara', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
@@ -205,7 +219,7 @@ INSERT INTO `penduduk` (`nik`, `nama`, `kelamin`, `tempatlahir`, `tgllahir`, `al
 ('34030156', 'Fahima', 'P', 5, '2019-03-27', '', '', 'Islam', '3403079', NULL, 1, 1, 'KIN'),
 ('34030157', 'Azlan Zaidan', 'L', 5, '2019-04-21', '', '', 'Islam', '3403081', NULL, 1, 1, 'KIN'),
 ('34030158', 'Tri Haikal', 'L', 5, '2019-10-01', '', '', 'Islam', '3403083', NULL, 1, 1, 'KIN'),
-('34030159', 'Alnayra', 'P', 5, '2019-12-03', '', '', 'Islam', '3403085', NULL, 1, 1, 'KIN'),
+('34030159', 'Alnayra', 'P', 5, '2019-12-03', '', '', 'Islam', NULL, NULL, 1, 1, 'KIN'),
 ('3403016', 'Suroso', 'L', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
 ('3403017', 'Yuliana', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
 ('3403018', 'Purnomo', 'L', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
@@ -272,7 +286,10 @@ INSERT INTO `penduduk` (`nik`, `nama`, `kelamin`, `tempatlahir`, `tgllahir`, `al
 ('3403081', 'Khotimah', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
 ('3403083', 'Wasikem', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
 ('3403085', 'Sri Mulyani', 'P', NULL, '1985-03-03', '', '', 'Islam', NULL, NULL, 1, 0, ''),
-('8253141', 'AA Khun', 'L', NULL, '2020-04-02', '', '', 'Islam', '3403085', '3403011009670001', 1, 0, '');
+('3464664', 'Adek 2', 'P', 5, '2020-05-13', '', '', 'Islam', NULL, NULL, 6, 1, 'NON'),
+('39762', 'Adek 5', 'L', 5, '2018-01-02', '', '', 'Islam', NULL, NULL, 7, 1, 'KIN'),
+('8253141', 'AA Khun', 'L', NULL, '2020-04-02', '', '', 'Islam', '3403085', '3403011009670001', 1, 0, ''),
+('9326921', 'Adek 1', 'L', 5, '2020-01-16', '', '', 'Islam', NULL, NULL, 6, 1, 'KIN');
 
 -- --------------------------------------------------------
 
@@ -402,7 +419,24 @@ INSERT INTO `pengukuran` (`idpengukuran`, `idacara`, `idpetugas`, `nik`, `berat`
 (129, 22, '34030130', '34030130', '16.50', NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL),
 (130, 23, '3403010505980001', '34030130', '16.70', NULL, NULL, 'N', 0, 1, NULL, NULL, NULL, 'KIN'),
 (132, 23, '3403010505980001', '34030134', '14.70', NULL, NULL, 'O', 0, 1, NULL, NULL, NULL, 'KIN'),
-(133, 23, '3403010505980001', '8253141', '3.00', NULL, NULL, 'B', 0, 1, NULL, NULL, NULL, NULL);
+(133, 23, '3403010505980001', '8253141', '3.00', NULL, NULL, 'B', 0, 1, NULL, NULL, NULL, NULL),
+(134, 31, '3403010505980001', '34030124', '12.00', NULL, NULL, 'BGM', 0, 1, NULL, NULL, NULL, 'NON'),
+(135, 31, '3403010505980001', '34030125', '11.00', NULL, NULL, 'BGM', 0, 1, NULL, NULL, NULL, 'KIN'),
+(136, 31, '3403011303980001', '8253141', '2.80', '90.0', '0.0', 'BGM', 1, 0, NULL, NULL, NULL, 'KIN'),
+(137, 31, '3403010505980001', '34030159', '3.00', '90.0', NULL, 'BGM', 1, 0, NULL, NULL, NULL, 'KIN'),
+(138, 31, '3403010505980001', '34030126', '13.00', NULL, NULL, 'O', 0, 1, NULL, NULL, NULL, 'KIN'),
+(139, 31, '3403010505980001', '34030130', '16.00', NULL, NULL, 'T', 0, 1, NULL, NULL, NULL, 'KIN'),
+(140, 31, '3403010505980001', '34030134', '15.00', NULL, NULL, 'N', 0, 1, NULL, NULL, NULL, 'KIN'),
+(141, 31, '3403010505980001', '34030129', '12.00', NULL, NULL, 'B', 0, 1, NULL, NULL, NULL, 'KIN'),
+(142, 32, '3403010505980001', '9326921', '5.00', '0.0', '0.0', 'O', 0, 1, NULL, NULL, NULL, 'KIN'),
+(143, 32, '3403010505980001', '3464664', '2.60', NULL, NULL, 'B', 0, 1, NULL, NULL, NULL, 'NON'),
+(144, 33, '3403010505980001', '39762', '12.00', NULL, NULL, 'B', 0, 1, NULL, NULL, NULL, 'KIN'),
+(145, 33, '3403010505980001', '2938658923', '7.00', NULL, NULL, 'BGM', 0, 1, NULL, NULL, NULL, 'NON'),
+(146, 33, '3403010505980001', '2345283', '4.00', '0.0', '0.0', 'B', 1, 0, NULL, NULL, NULL, 'KIN'),
+(147, 34, '3403010505980001', '2836408235', '5.00', NULL, NULL, 'B', 1, 0, NULL, NULL, NULL, 'NON'),
+(148, 31, '3403011303980001', '34030158', '6.00', NULL, NULL, 'O', 0, 1, NULL, NULL, NULL, 'KIN'),
+(149, 31, '3403011303980001', '34030150', '9.00', NULL, NULL, 'O', 0, 0, NULL, NULL, NULL, 'KIN'),
+(150, 31, '3403011303980001', '34030153', '8.00', NULL, NULL, 'O', 0, 1, NULL, NULL, NULL, 'KIN');
 
 -- --------------------------------------------------------
 
@@ -599,12 +633,12 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `nama`, `email`, `image`, `password`, `role_id`, `aktif`, `date_created`, `username`, `nik`, `unitkerja`) VALUES
 (13, 'Aditya Pratama Nugraha', 'aditya@yahoo.com', 'default.jpg', '21232f297a57a5a743894a0e4a801fc3', 2, 0, 1581209365, 'adit', '', 0),
-(14, 'Aditya Pratama Nugraha', 'super@admin.com', 'default.jpg', '$2y$10$llBg6uoqHUAID148mQH6pe6Y8WCPuWWUxvy.X8Yhdtuwbrsbp/OGm', 1, 1, 1581209624, 'admin', '3403010505980001', 1),
-(15, 'Aditya Pratama Nugraha', 'adityapeen@yahoo.com', 'default.jpg', '$2y$10$ELzl1ZAaKRKTta.k2rMKzOoyH1StHDdfsW1vamXNjBsfXKFj.Fbfm', 2, 0, 1581325620, '', '', 0),
+(14, 'Aditya Pratama Nugraha', 'super@admin.com', 'admin.jpg', '$2y$10$llBg6uoqHUAID148mQH6pe6Y8WCPuWWUxvy.X8Yhdtuwbrsbp/OGm', 1, 1, 1581209624, 'admin', '3403010505980001', 1),
 (16, 'Administrator', 'root@admin.com', 'default.jpg', '$2y$10$qbV9bYWXZVybGa6OhF/Y2.9Gbe8Oce6BD8UTgcE497VP5fh1XgztO', 2, 0, 1581325803, 'root', '', 0),
 (19, 'Dini Mutiasari', 'dini@mail.com', 'default.jpg', '$2y$10$UKe8L/aXO5vaT5jn7MMbW.lSsOpWqBfUTLeWFv1bk/oPxb3TghJy2', 2, 1, 1581753481, 'dini', '3403011303980001', 1),
 (20, 'Dewik Astuti', NULL, 'default.jpg', '$2y$10$dEogPc.XolEkCPNmzPX80OPyqdkRBX.ST5TArD/7FYFcXVbHaHPIC', 3, 1, 1586015589, 'dewik', '3403047', 1),
-(23, 'Maryadi', NULL, 'default.jpg', '$2y$10$3RQwZSnllE3lgD1eDNZOa.mamqu9lk9es64mZ.aXr7gko2FtWIeT.', 3, 1, 1586015937, 'maryadi', '3403048', 1);
+(23, 'Maryadi', NULL, 'default.jpg', '$2y$10$3RQwZSnllE3lgD1eDNZOa.mamqu9lk9es64mZ.aXr7gko2FtWIeT.', 3, 1, 1586015937, 'maryadi', '3403048', 1),
+(30, 'Aditya Pratama Nugraha', NULL, 'default.jpg', '$2y$10$oxHGEL8zp6DbRkQsbQ4/ZeLApniQdgP9TnJTQyrV1xjBgXvtCvSyC', 3, 1, 1589615726, 'Dit', '3403010505980001', 2);
 
 -- --------------------------------------------------------
 
@@ -707,7 +741,8 @@ INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active
 (12, 2, 'Kelola User', 'puskesmas/userlist', 'fas fa-fw fa-table', 1),
 (14, 1, 'User', 'admin/userlist', 'fas fa-fw fa-user', 1),
 (16, 3, 'SKDN', 'posyandu/skdn', 'fas fa-fw fa-table', 1),
-(17, 2, 'BGM', 'puskesmas/bgm', 'fas fa-fw fa-weight', 1);
+(17, 2, 'BGM', 'puskesmas/bgm', 'fas fa-fw fa-weight', 1),
+(18, 2, 'Import', 'puskesmas/import', 'fas fa-fw fa-download', 1);
 
 --
 -- Indexes for dumped tables
@@ -825,13 +860,13 @@ ALTER TABLE `user_sub_menu`
 -- AUTO_INCREMENT for table `beritaacara`
 --
 ALTER TABLE `beritaacara`
-  MODIFY `idacara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `idacara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `pengukuran`
 --
 ALTER TABLE `pengukuran`
-  MODIFY `idpengukuran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `idpengukuran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
 
 --
 -- AUTO_INCREMENT for table `tbdesa`
@@ -855,7 +890,7 @@ ALTER TABLE `tbkecamatan`
 -- AUTO_INCREMENT for table `tbposyandu`
 --
 ALTER TABLE `tbposyandu`
-  MODIFY `idposyandu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idposyandu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tbprovinsi`
@@ -873,7 +908,7 @@ ALTER TABLE `tbpuskesmas`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `user_access_menu`
@@ -897,7 +932,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables

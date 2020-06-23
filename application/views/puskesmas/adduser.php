@@ -1,5 +1,16 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
+    <div class="col-lg-12 mb-4">
+        <?php if ($this->session->flashdata('message')) {
+        ?>
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body">
+                    <?= $this->session->flashdata('message'); ?>
+                </div>
+            </div>
+        <?php
+        } ?>
+    </div>
     <?php if (!isset($penduduk)) { ?>
         <div class="row">
             <div class="form-row col-xl-12 col-lg-12 justify-content-center">

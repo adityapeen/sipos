@@ -78,13 +78,16 @@ extends CI_Controller
         $this->form_validation->set_rules('nama', 'Nama', 'required|trim', array('required' => '%s tidak boleh kosong!'));
         $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[user.username]', array('required' => '%s tidak boleh kosong!', 'is_unique' => '%s sudah digunakan orang lain!'));
         //$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', array('required' => '%s tidak boleh kosong!', 'valid_email' => 'Alamat %s harus valid!',  'is_unique' => 'Alamat %s sudah terdaftar!'));
-        $this->form_validation->set_rules('password1', 'Password', 'required|min_length[4]|matches[password2]', array('required' => '%s tidak boleh kosong!', 'matches' => '%s harus sama!', 'min_length' => '%s minimal 4 karakter!'));
-        $this->form_validation->set_rules('password2', 'Password', 'required|min_length[4]|matches[password2]', array('required' => '%s tidak boleh kosong!', 'matches' => '%s harus sama!', 'min_length' => '%s minimal 4 karakter!'));
+        //$this->form_validation->set_rules('password1', 'Password', 'required|min_length[4]|matches[password2]', array('required' => '%s tidak boleh kosong!', 'matches' => '%s harus sama!', 'min_length' => '%s minimal 4 karakter!'));
+        //$this->form_validation->set_rules('password2', 'Password', 'required|min_length[4]|matches[password2]', array('required' => '%s tidak boleh kosong!', 'matches' => '%s harus sama!', 'min_length' => '%s minimal 4 karakter!'));
         if ($this->form_validation->run() == false) {
-            $data['title'] = "Register Akun - SIPOSYANDU";
-            $this->load->view('template/auth_header', $data);
-            $this->load->view('auth/register');
-            $this->load->view('template/auth_footer');
+            // $data['title'] = "Register Akun - SIPOSYANDU";
+            // $this->load->view('template/auth_header', $data);
+            // $this->load->view('auth/register');
+            // $this->load->view('template/auth_footer');
+            $this->session->set_flashdata('message', 'Username sudah digunakan orang lain!');
+            if ($this->input->post('tipe') == 'admin') redirect('admin/adduser');
+            else if ($this->input->post('tipe') == 'puskesmas') redirect('puskesmas/adduser');
         } else {
             $data = [
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
