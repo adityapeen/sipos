@@ -1,5 +1,5 @@
 <?php
-class Pdf
+class pdf
 {
     function __construct()
     {
