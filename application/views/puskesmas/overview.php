@@ -10,12 +10,18 @@
             <div class="form-inline">
                 <select class="form-control mb-1 mr-1" id="bulan" name="bulan">
                     <?php foreach ($bulan as $bl) : ?>
-                        <option value="<?= $bl->bulan; ?>" <?php if ($bl->bulan == date('m') || $bl->bulan == $this->input->post('bl')) echo "selected"; ?>><?= $bl->nama; ?></option>
+                        <option value="<?= $bl->bulan; ?>" <?php if ($this->input->post() != NULL) {
+                                                                if ($bl->bulan == $this->input->post('bl')) echo "selected";
+                                                            } else if ($bl->bulan == date('m')) echo "selected"; ?>>
+                            <?= $bl->nama; ?></option>
                     <?php endforeach ?>
                 </select>
                 <select class="form-control mb-1 mr-1" id="tahun" name="tahun">
                     <?php foreach ($tahun as $th) : ?>
-                        <option value="<?= $th->tahun; ?>" <?php if ($th->tahun == date('Y') || $th->tahun == $this->input->post('th')) echo "selected"; ?>><?= $th->tahun; ?></option>
+                        <option value="<?= $th->tahun; ?>" <?php if ($this->input->post() != NULL) {
+                                                                if ($th->tahun == $this->input->post('th')) echo "selected";
+                                                            } else if ($th->tahun == date('Y')) echo "selected"; ?>>
+                            <?= $th->tahun; ?></option>
                     <?php endforeach ?>
                 </select>
                 <div class="col mb-1 p-1"><button class="btn btn-block btn-success" onclick="getHistory()">Lihat</button></div>
