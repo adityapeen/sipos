@@ -66,8 +66,8 @@
                                     <tr>
                                         <th rowspan="1" colspan="1">Tanggal</th>
                                         <th rowspan="1" colspan="1">Balita Ditimbang</th>
-                                        <th rowspan="1" colspan="1">Aksi</th>
                                         <th rowspan="1" colspan="1">Judul Materi</th>
+                                        <th rowspan="1" colspan="1">Aksi</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>

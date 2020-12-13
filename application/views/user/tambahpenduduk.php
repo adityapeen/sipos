@@ -17,7 +17,7 @@
                                 <div class="form-group">
                                     <label>NIK*</label>
                                     <?= form_error('nik', '<small class="text-danger pl-3">', '</small>'); ?>
-                                    <input type="text" class="form-control" name="nik" id="nik" placeholder="Nomor Induk Kependudukan" value="" required>
+                                    <input type="number" class="form-control" name="nik" id="nikadd" placeholder="Nomor Induk Kependudukan" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
     $(document).ready(function() {
         $('#nmayah').autocomplete({
             minLength: 3,
-            source: "<?php echo site_url('api/searchayah/?'); ?>",
+            source: "<?php echo site_url('api/searchayah/?idp=') . $user['idposyandu']; ?>",
 
             select: function(event, ui) {
                 $('#nmayah').val(ui.item.label);
@@ -148,7 +148,7 @@
 
         $('#nmibu').autocomplete({
             minLength: 3,
-            source: "<?php echo site_url('api/searchibu/?'); ?>",
+            source: "<?php echo site_url('api/searchibu/?idp=') . $user['idposyandu']; ?>",
 
             select: function(event, ui) {
                 $('#nmibu').val(ui.item.label);
@@ -163,6 +163,21 @@
             select: function(event, ui) {
                 $('#nmtempatlahir').val(ui.item.label);
                 $('[name="tempatlahir"]').val(ui.item.idkab);
+            }
+        });
+
+        $('#nikadd').focusout(function() {
+            var nik = $('#nikadd').val();
+            if (nik != '') {
+                $.get("<?= base_url('api/getnik'); ?>", {
+                        nik: nik,
+                    })
+                    .done(function(data) {
+                        var e = JSON.parse(data);
+                        if (e.terpakai == true) {
+                            alert("NIK sudah digunakan!");
+                        }
+                    });
             }
         });
 

@@ -10,6 +10,12 @@
                     <?= $this->session->flashdata('sukses'); ?>
                 </div>
             </div>
+        <?php } else if ($this->session->flashdata('form_error')) { ?>
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body">
+                    <?= $this->session->flashdata('form_error'); ?>
+                </div>
+            </div>
         <?php } ?>
     </div>
     <p class="text-center"><a href="#" class="btn btn-success btn-sm text-white-70 small" data-toggle="modal" data-target="#balitaModal"><b>Tambah Peserta Posyandu</b></a></p>
@@ -81,7 +87,7 @@
                     <input type="hidden" name="daftar" value=1>
                     <div class="form-group">
                         <label>NIK</label>
-                        <input type="text" name="nik" id="nik" class="form-control" placeholder="NIK (angka saja)" required>
+                        <input type="number" name="nik" id="nikadd" class="form-control" placeholder="NIK (angka saja)" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Balita*</label>
@@ -126,3 +132,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#nikadd').focusout(function() {
+        var nik = $('#nikadd').val();
+        if (nik != '') {
+            $.get("<?= base_url('api/getnik'); ?>", {
+                    nik: nik,
+                })
+                .done(function(data) {
+                    var e = JSON.parse(data);
+                    if (e.terpakai == true) {
+                        alert("NIK sudah digunakan!");
+                    }
+                });
+        }
+    });
+</script>

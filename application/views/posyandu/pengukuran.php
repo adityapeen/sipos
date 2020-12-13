@@ -20,6 +20,12 @@
                     <a href="#" class="btn btn-danger btn-sm text-white-70 small" data-toggle="modal" data-target="#kegiatanModal"><b>Buat Berita Acara</b></a>
                 </div>
             </div>
+        <?php } else if ($this->session->flashdata('form_error')) { ?>
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body">
+                    <?= $this->session->flashdata('form_error'); ?>
+                </div>
+            </div>
         <?php } ?>
     </div>
 
@@ -183,13 +189,13 @@
                         <div class="col md-6">
                             <div class="form-group">
                                 <label>Tinggi Badan (cm)</label>
-                                <input type="number" name="tinggi" id="tinggi" class="form-control" placeholder="(Boleh Kosong)" value="" step=".01">
+                                <input type="number" name="tinggi" id="tinggi" class="form-control" placeholder="(Boleh Kosong)" value="" step=".1">
                             </div>
                         </div>
                         <div class="col md-6">
                             <div class="form-group">
                                 <label>Lingkar Kepala (cm)</label>
-                                <input type="number" name="kepala" id="kepala" class="form-control" placeholder="(Boleh Kosong)" value="" step=".01">
+                                <input type="number" name="kepala" id="kepala" class="form-control" placeholder="(Boleh Kosong)" value="" step=".1">
                             </div>
                         </div>
                     </div>
@@ -218,11 +224,11 @@
                                 </div>
                                 <div class="col-md-6 pr-1">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina0" value=1>
+                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina1" value=1>
                                         <label class="form-check-label" for="vitamina">Ya</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina1" value=0 checked>
+                                        <input class="form-check-input" type="radio" name="vitamina" id="vitamina0" value=0 checked>
                                         <label class="form-check-label" for="vitamina">Tidak</label>
                                     </div>
                                 </div>
@@ -272,7 +278,7 @@
                     <input type="hidden" name="ukur" value=1>
                     <div class="form-group">
                         <label>NIK</label>
-                        <input type="text" name="nik" id="nikadd" class="form-control" placeholder="NIK (angka saja)" required>
+                        <input type="number" name="nik" id="nikadd" class="form-control" placeholder="NIK (angka saja)" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Balita*</label>
@@ -377,6 +383,21 @@
                 $('#keterangan').val(e.ket);
 
             });
+    });
+
+    $('#nikadd').focusout(function() {
+        var nik = $('#nikadd').val();
+        if (nik != '') {
+            $.get("<?= base_url('api/getnik'); ?>", {
+                    nik: nik,
+                })
+                .done(function(data) {
+                    var e = JSON.parse(data);
+                    if (e.terpakai == true) {
+                        alert("NIK sudah digunakan!");
+                    }
+                });
+        }
     });
 
     // function getDataPeserta() {

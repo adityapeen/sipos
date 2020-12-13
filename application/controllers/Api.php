@@ -15,8 +15,8 @@ extends CI_Controller
     }
     function searchAyah()
     {
-        if (isset($_GET['term'])) {
-            $result = $this->penduduk_model->getAyah($_GET['term']);
+        if (isset($_GET['term']) && isset($_GET['idp'])) {
+            $result = $this->penduduk_model->getAyah($_GET['term'], $_GET['idp']);
             if (count($result) > 0) {
                 foreach ($result as $row)
                     $arr_result[] = array(
@@ -29,8 +29,8 @@ extends CI_Controller
     }
     function searchIbu()
     {
-        if (isset($_GET['term'])) {
-            $result = $this->penduduk_model->getIbu($_GET['term']);
+        if (isset($_GET['term']) && isset($_GET['idp'])) {
+            $result = $this->penduduk_model->getIbu($_GET['term'], $_GET['idp']);
             if (count($result) > 0) {
                 foreach ($result as $row)
                     $arr_result[] = array(
@@ -105,7 +105,18 @@ extends CI_Controller
             } else echo "Data tidak ditemukan";
         }
     }
+    function getNIK()
+    {
+        if (isset($_GET['nik'])) {
+            $res = array('terpakai' => '');
+            $result = $this->db->get_where('penduduk', ['nik' => $_GET['nik']])->row_array();
+            if ($result) {
+                $res['terpakai'] = true;
+            } else $res['terpakai'] = false;
 
+            echo json_encode($res);
+        }
+    }
     function getUsername()
     {
         if (isset($_GET['username'])) {

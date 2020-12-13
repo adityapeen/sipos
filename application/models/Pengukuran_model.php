@@ -14,9 +14,9 @@ class Pengukuran_model extends CI_Model
     public $keterangan;
     public $asi;
     public $vitamina;
-    public $beratumur;
-    public $tinggiumur;
-    public $berattinggi;
+    // public $beratumur;
+    // public $tinggiumur;
+    // public $berattinggi;
     public $statusbantuan;
 
     public function rules()
@@ -62,9 +62,9 @@ class Pengukuran_model extends CI_Model
         $this->keterangan = $post['keterangan'];
         $this->asi = $post['asie'];
         $this->vitamina = $post['vitamina'];
-        $this->beratumur = (!isset($post['beratumur']) || $post['beratumur'] == NULL ? NULL : $post['beratumur']);
-        $this->tinggiumur = (!isset($post['tinggiumur']) || $post['tinggiumur'] == NULL ? NULL : $post['tinggiumur']);
-        $this->berattinggi = (!isset($post['berattinggi']) || $post['berattinggi'] == NULL ? NULL : $post['berattinggi']);
+        // $this->beratumur = (!isset($post['beratumur']) || $post['beratumur'] == NULL ? NULL : $post['beratumur']);
+        // $this->tinggiumur = (!isset($post['tinggiumur']) || $post['tinggiumur'] == NULL ? NULL : $post['tinggiumur']);
+        // $this->berattinggi = (!isset($post['berattinggi']) || $post['berattinggi'] == NULL ? NULL : $post['berattinggi']);
         $this->statusbantuan = (!isset($post['statusbantuan']) ? NULL : strtoupper($post['statusbantuan']));
 
 
@@ -83,9 +83,9 @@ class Pengukuran_model extends CI_Model
         $this->keterangan = $post['keterangan'];
         $this->asi = $post['asie'];
         $this->vitamina = $post['vitamina'];
-        $this->beratumur = (!isset($post['beratumur']) ? NULL : $post['beratumur']);
-        $this->tinggiumur = (!isset($post['tinggiumur']) ? NULL : $post['tinggiumur']);
-        $this->berattinggi = (!isset($post['berattinggi']) ? NULL : $post['berattinggi']);
+        // $this->beratumur = (!isset($post['beratumur']) ? NULL : $post['beratumur']);
+        // $this->tinggiumur = (!isset($post['tinggiumur']) ? NULL : $post['tinggiumur']);
+        // $this->berattinggi = (!isset($post['berattinggi']) ? NULL : $post['berattinggi']);
         $this->statusbantuan = (!isset($post['statusbantuan']) ? NULL : strtoupper($post['statusbantuan']));
 
         return $this->db->update($this->_table, $this, array('idpengukuran' => $post['idpengukuran']));

@@ -122,7 +122,7 @@ class Kegiatan_model extends CI_Model
         $this->db->select('p.nik, p.nama, p.tgllahir, (DATEDIFF(CURDATE(), tgllahir)/30.40) as umur, ' . $sub);
         $this->db->where('idposyandu', $idp);
         // $this->db->where('umur <', 30);
-        $this->db->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 60); //Filter umur
+        $this->db->where('FLOOR(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 60); //Filter umur
         $this->db->order_by('tgllahir', 'ASC');
         $this->db->from('penduduk' . " as p");
         return $this->db->get()->result();
@@ -132,7 +132,7 @@ class Kegiatan_model extends CI_Model
     {
         $this->db->select('count(p.nik) as jml ');
         $this->db->where('idposyandu', $idp);
-        $this->db->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 61); //Filter umur
+        $this->db->where('FLOOR(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 60); //Filter umur
         $this->db->order_by('tgllahir', 'ASC');
         $this->db->from('penduduk' . " as p");
         return $this->db->get()->result();

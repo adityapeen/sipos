@@ -60,6 +60,10 @@ extends CI_Controller
                 redirect($url);
             }
         } else {
+            $this->session->set_flashdata("form_error", form_error('nik'));
+            if (isset($_POST['ukur'])) redirect('posyandu/pengukuran');
+            else if (isset($_POST['daftar'])) redirect('posyandu/peserta');
+
             $data['user'] = $this->session->userdata();
             $head['title'] = "Tambah Penduduk - SIPOSYANDU";
             $data['posyandu'] = $this->db->where('idposyandu', $idp)->get('tbposyandu')->row_array();
@@ -128,29 +132,40 @@ extends CI_Controller
         $uname = $this->input->post('uname');
         $config['upload_path'] = realpath($direktori);
         $config['allowed_types'] = 'jpg|jpeg|png';
-        $config['max_size'] = '10000';
+        $config['max_size'] = '1000';
         $config['encrypt_name'] = false;
         $config['file_name'] = $uname . '.jpg';
+        // var_dump($config);
 
         if (realpath($direktori . $uname . '.jpg')) { //Check and Delete existing image
-            unlink(realpath($direktori . $uname . '.jpg'));
+            rename('./assets/img/profile/' . $uname . '.jpg', './assets/img/profile/buff.jpg');
+            //unlink(realpath($direktori . $uname . '.jpg'));
             echo 'Existing picture deleted<br>';
         }
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload()) { //upload gagal
             $this->session->set_flashdata('gagal', 'Gambar Gagal diupload' . $this->upload->display_errors());
+            rename('./assets/img/profile/buff.jpg', './assets/img/profile/' . $uname . '.jpg');
             echo $this->upload->display_errors();
         } else {
             $this->session->set_flashdata('sukses', 'Foto Akun berhasil diperbarui');
             $this->db->update('user', ['image' => $this->upload->data('file_name')], ['username' => $uname]);
+            $this->session->set_userdata('image', $this->upload->data('file_name'));
+            unlink(realpath($direktori . 'buff.jpg'));
+
             echo "Sukses upload & Update DB";
         }
         redirect('user');
     }
     public function resetpicture()
     {
+        if ($this->session->image != 'default.jpg') {
+            $oldPic = './assets/img/profile/' . $this->session->username . 'jpg';
+            unlink(realpath($oldPic));
+        }
         $this->db->update('user', ['image' => 'default.jpg'], ['username' => $this->input->post('id')]);
+
         $this->session->set_flashdata('sukses', 'Foto Akun berhasil direset');
-        redirect('user');
+        //redirect('user');
     }
 }

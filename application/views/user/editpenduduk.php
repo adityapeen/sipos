@@ -130,7 +130,7 @@
     $(document).ready(function() {
         $('#nmayah').autocomplete({
             minLength: 3,
-            source: "<?php echo site_url('api/searchayah/?'); ?>",
+            source: "<?php echo site_url('api/searchayah/?idp=') . $user['idposyandu']; ?>",
 
             select: function(event, ui) {
                 $('#nmayah').val(ui.item.label);
@@ -140,7 +140,7 @@
 
         $('#nmibu').autocomplete({
             minLength: 3,
-            source: "<?php echo site_url('api/searchibu/?'); ?>",
+            source: "<?php echo site_url('api/searchibu/?idp=') . $user['idposyandu']; ?>",
 
             select: function(event, ui) {
                 $('#nmibu').val(ui.item.label);

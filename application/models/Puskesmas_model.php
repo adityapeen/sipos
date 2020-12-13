@@ -69,8 +69,10 @@ class Puskesmas_model extends CI_Model
     {
         $post = $this->input->post();
         $data = [
-            'kenaikan' => $post['kenaikan'],
-            'garis_merah' => $post['garis_merah']
+            'kenaikan_l' => $post['kenaikan_l'],
+            'kenaikan_p' => $post['kenaikan_p'],
+            'garis_merah_l' => $post['garis_merah_l'],
+            'garis_merah_p' => $post['garis_merah_p']
         ];
         return $this->db->update('berat', $data, ['umur' => $post['idedit']]);
     }

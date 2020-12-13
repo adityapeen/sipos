@@ -39,36 +39,39 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Baris pertama manual karena sql beda sendiri -->
-                                <tr role="row">
-                                    <td class="text-center">1</td>
-                                    <td>Jumlah balita yang ada di Posyandu (S)</td>
-                                    <?php
-                                    $totalSemua = 0;
-                                    foreach ($kelamin as $kel) {
-                                        $totalTemp = 0;
-                                        foreach ($umur as $item2) {
-                                            $count = $this->db->select("count(penduduk.nik) AS jumlah")
-                                                ->from("penduduk")
-                                                ->where("ROUND(DATEDIFF('" . $header[4]['data'] . "', penduduk.tgllahir)/30.40) >=", $item2["min"])
-                                                ->where("ROUND(DATEDIFF('" . $header[4]['data'] . "', penduduk.tgllahir)/30.40) <=", $item2["max"])
-                                                ->where('idposyandu', $posyandu['idposyandu'])
-                                                ->where($kel['wer'])
-                                                ->get()->first_row();
-                                            $totalTemp = $totalTemp + $count->jumlah;
-                                            echo "<td class=\"text-center\">" . $count->jumlah . "</td>";
+                                <!-- Baris 1-2 manual karena sql beda sendiri -->
+                                <?php foreach ($urai as $item1) { ?>
+                                    <tr role="row">
+                                        <td class="text-center"><?= 1  + @$number++ ?></td>
+                                        <td><?= $item1["label"] ?></td>
+                                        <?php
+                                        $totalSemua = 0;
+                                        foreach ($kelamin as $kel) {
+                                            $totalTemp = 0;
+                                            foreach ($umur as $item2) {
+                                                $count = $this->db->select("count(penduduk.nik) AS jumlah")
+                                                    ->from("penduduk")
+                                                    ->where("FLOOR(DATEDIFF('" . $header[4]['data'] . "', penduduk.tgllahir)/30.40) >=", $item2["min"])
+                                                    ->where("FLOOR(DATEDIFF('" . $header[4]['data'] . "', penduduk.tgllahir)/30.40) <=", $item2["max"])
+                                                    ->where('idposyandu', $posyandu['idposyandu'])
+                                                    ->where($kel['wer'])
+                                                    ->get()->first_row();
+                                                $totalTemp = $totalTemp + $count->jumlah;
+                                                echo "<td class=\"text-center\">" . $count->jumlah . "</td>";
+                                            }
+                                            echo "<td class=\"text-center\">" . $totalTemp . "</td>";
+                                            $totalSemua += $totalTemp;
                                         }
-                                        echo "<td class=\"text-center\">" . $totalTemp . "</td>";
-                                        $totalSemua += $totalTemp;
-                                    }
-                                    ?>
-                                    <td class="text-center"><?= $totalSemua ?></td>
-                                </tr>
+                                        ?>
+                                        <td class="text-center"><?= $totalSemua ?></td>
+                                    </tr>
+                                <?php } ?>
+
 
                                 <!-- Perulangan baris 2-11 -->
                                 <?php foreach ($uraian as $item1) { ?>
                                     <tr role="row">
-                                        <td class="text-center"><?= 2 + @$number++ ?></td>
+                                        <td class="text-center"><?= 1 + @$number++ ?></td>
                                         <td><?= $item1["label"] ?></td>
                                         <?php
                                         $totalSemua = 0;
@@ -79,8 +82,8 @@
                                                     ->from("pengukuran")
                                                     ->join("beritaacara", "beritaacara.idacara=pengukuran.idacara")
                                                     ->join("penduduk", "penduduk.nik=pengukuran.nik")
-                                                    ->where("ROUND(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
-                                                    ->where("ROUND(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
+                                                    ->where("FLOOR(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) >=", $item2["min"])
+                                                    ->where("FLOOR(DATEDIFF(beritaacara.tglacara, penduduk.tgllahir)/30.40) <=", $item2["max"])
                                                     ->where("pengukuran.idacara =", $item1["id"])
                                                     ->where($kel['wer'])
                                                     ->where($item1['wer'])
@@ -155,12 +158,12 @@
                                         <td><?= $b->kelamin ?></td>
                                         <td><?= $b->berat ?></td>
                                         <td><?= $b->tinggi ?></td>
-                                        <td><?php echo (round($b->umur) == 1) ?  'V' : NULL  ?></td>
-                                        <td><?php echo (round($b->umur) == 2) ?  'V' : NULL  ?></td>
-                                        <td><?php echo (round($b->umur) == 3) ?  'V' : NULL  ?></td>
-                                        <td><?php echo (round($b->umur) == 4) ?  'V' : NULL  ?></td>
-                                        <td><?php echo (round($b->umur) == 5) ?  'V' : NULL  ?></td>
-                                        <td><?php echo (round($b->umur) == 6) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (floor($b->umur) == 1) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (floor($b->umur) == 2) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (floor($b->umur) == 3) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (floor($b->umur) == 4) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (floor($b->umur) == 5) ?  'V' : NULL  ?></td>
+                                        <td><?php echo (floor($b->umur) == 6) ?  'V' : NULL  ?></td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>
@@ -199,7 +202,7 @@
                                         <td class="text-left"><?= $b->ibu . ' / ' . $b->ayah ?></td>
                                         <td><?= $b->tgllahir ?></td>
                                         <td><?= $b->kelamin ?></td>
-                                        <td><?= round($b->umur) ?></td>
+                                        <td><?= floor($b->umur) ?></td>
                                         <td><?= $b->berat ?></td>
                                         <td><?= $b->tinggi ?></td>
                                     </tr>

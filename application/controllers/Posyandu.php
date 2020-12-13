@@ -264,17 +264,17 @@ extends CI_Controller
             ],
             [
                 "id" => $idacara,
-                "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)**",
+                "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)",
                 "wer" => ['penduduk.kms' => 1]
             ],
         ];
 
         $data["uraian"] = [
-            [
-                "id" => $idacara,
-                "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)**",
-                "wer" => ['penduduk.kms' => 1]
-            ],
+            // [
+            //     "id" => $idacara,
+            //     "label" => "Jumlah balita yang mempunyai kartu KMS/ Buku KIA (K)**",
+            //     "wer" => ['penduduk.kms' => 1]
+            // ],
             [
                 "id" => $idacara,
                 "label" => "Jumlah Balita yang naik timbangannya (N)",

@@ -23,7 +23,7 @@ class Penduduk_model extends CI_Model
             [
                 'field' => 'nik',
                 'label' => 'NIK',
-                'rules' => 'required'
+                'rules' => 'required|is_unique[penduduk.nik]'
             ],
 
             [
@@ -113,18 +113,26 @@ class Penduduk_model extends CI_Model
         return $this->db->delete($this->_table, array("nik" => $id));
     }
 
-    function getAyah($title)
+    function getAyah($title, $idp)
     {
+        $where = [
+            'kelamin' => 'L',
+            'idposyandu' => $idp
+        ];
         $this->db->like('nama', $title, 'both');
-        $this->db->where('kelamin', 'L');
+        $this->db->where($where);
         $this->db->order_by('nama', 'ASC');
         $this->db->limit(10);
         return $this->db->get('penduduk')->result();
     }
-    function getIbu($title)
+    function getIbu($title, $idp)
     {
+        $where = [
+            'kelamin' => 'P',
+            'idposyandu' => $idp
+        ];
         $this->db->like('nama', $title, 'both');
-        $this->db->where('kelamin', 'P');
+        $this->db->where($where);
         $this->db->order_by('nama', 'ASC');
         $this->db->limit(10);
         return $this->db->get('penduduk')->result();
@@ -142,7 +150,7 @@ class Penduduk_model extends CI_Model
         $sub = "(SELECT idpengukuran from pengukuran where nik = p.nik AND idacara = $idacara) as idpengukuran";
         $this->db->select('p.nik, p.nama, p.tgllahir, (DATEDIFF(CURDATE(), tgllahir)/30.40) as umur, ' . $sub);
         $this->db->where('idposyandu', $idp);
-        $this->db->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 61);
+        $this->db->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 60);
         $this->db->order_by('tgllahir', 'ASC');
         $this->db->from($this->_table . " as p");
         return $this->db->get()->result();
@@ -152,7 +160,7 @@ class Penduduk_model extends CI_Model
     {
         $this->db->select('p.nik, p.nama, p.tgllahir, (DATEDIFF(CURDATE(), tgllahir)/30.40) as umur, ');
         $this->db->where('idposyandu', $idp);
-        $this->db->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 61);
+        $this->db->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 60);
         $this->db->order_by('tgllahir', 'ASC');
         $this->db->from($this->_table . " as p");
         return $this->db->get()->result();
