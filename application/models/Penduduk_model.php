@@ -206,4 +206,9 @@ class Penduduk_model extends CI_Model
         $this->db->where('idposyandu', $idp);
         return $this->db->get()->result();
     }
+
+    public function checkTimbanganPenduduk($id)
+    {
+        return $this->db->get_where($this->_table, ['nik' => $id])->result();
+    }
 }

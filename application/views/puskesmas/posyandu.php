@@ -28,6 +28,7 @@
                                 <div class="text-xs font-weight-bold text-uppercase text-white-50 mb-1">Dusun <?= $p->dusun . ' - ' . $p->desa; ?></div>
                                 <div class="h5 mb-0 font-weight-bold"><?= $p->nama; ?></div>
                                 <div class="text-s font-weight-bold"><?= $p->balita; ?> Balita</div>
+                                <div class="text-s font-weight-bold"><?= $p->kegiatan; ?> Kegiatan</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fw fa-stethoscope fa-2x text-white-50"></i>

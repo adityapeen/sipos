@@ -14,8 +14,16 @@
             </div>
         </div>
     <?php
-    }
+    } else if ($this->session->flashdata('gagal')) {
     ?>
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body">
+                    <?= $this->session->flashdata('gagal'); ?>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
     <p class="text-center">
         <a href="<?= base_url('user/tambahpenduduk/') . $posyandu['idposyandu']; ?>" class="btn btn-primary btn-sm text-white-70 small"><b>Tambah Penduduk</b></a>
     </p>

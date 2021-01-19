@@ -103,8 +103,12 @@ extends CI_Controller
     public function deletePenduduk()
     {
         $id = $this->input->post('idhapus');
-        if ($this->penduduk_model->delete($id)) $this->session->set_flashdata("sukses", "Data Penduduk berhasil dihapus");
-        else $this->session->set_flashdata("gagal", "Data Penduduk gagal dihapus");
+        if (!$this->penduduk_model->checkTimbanganPenduduk($id)) {
+            if ($this->penduduk_model->delete($id)) $this->session->set_flashdata("sukses", "Data Penduduk berhasil dihapus");
+            else $this->session->set_flashdata("gagal", "Data Penduduk gagal dihapus");
+        } else $this->session->set_flashdata("gagal", "Data Penduduk gagal dihapus, sudah ada data pengukuran pada penduduk ini");
+        // if ($this->penduduk_model->delete($id)) $this->session->set_flashdata("sukses", "Data Penduduk berhasil dihapus");
+        // else $this->session->set_flashdata("gagal", "Data Penduduk gagal dihapus");
         if ($this->session->userdata('role_id') < 3)
             $url = "puskesmas/penduduk/" . $_POST['idposyandu'];
         else $url = "user/penduduk";

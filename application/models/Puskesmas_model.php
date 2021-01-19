@@ -32,8 +32,9 @@ class Puskesmas_model extends CI_Model
     public function getPosyanduLokal($idp)
     {
         $idpus = $this->_getIDpuskesmas($idp);
-        $sub = "(SELECT COUNT(pen.nik) from penduduk as pen WHERE (DATEDIFF(CURDATE(), pen.tgllahir)/30.40) < 61 AND idposyandu = id) as balita";
-        $this->db->select('pos.idposyandu as id, pos.namaposyandu as nama, pos.dusun as dusun, des.nama as desa, ' . $sub);
+        $sub = ",(SELECT COUNT(pen.nik) from penduduk as pen WHERE (DATEDIFF(CURDATE(), pen.tgllahir)/30.40) < 60 AND idposyandu = id) as balita";
+        $sub2 = ",(SELECT COUNT(ba.idacara) from beritaacara as ba WHERE idposyandu = id) as kegiatan";
+        $this->db->select('pos.idposyandu as id, pos.namaposyandu as nama, pos.dusun as dusun, des.nama as desa ' . $sub . $sub2);
         $this->db->join('tbdesa as des', 'pos.iddesa = des.iddesa');
         $this->db->join('tbpuskesmas as pus', 'des.idkec = pus.idkec');
         $this->db->where('pus.idpuskesmas', $idpus['id']);
@@ -85,7 +86,7 @@ class Puskesmas_model extends CI_Model
             ->join('tbdesa as des', 'tbposyandu.iddesa = des.iddesa')
             ->join('tbpuskesmas as pus', 'des.idkec = pus.idkec')
             ->where('idpuskesmas', $idpus)
-            ->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 61) //Tanggal Sekarang
+            ->where('FLOOR(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 60) //Tanggal Sekarang
             ->group_by('penduduk.kelamin');
         return $this->db->get()->result();
     }
@@ -134,8 +135,8 @@ class Puskesmas_model extends CI_Model
             ->join('tbdesa as des', 'tbposyandu.iddesa = des.iddesa')
             ->join('tbpuskesmas as pus', 'des.idkec = pus.idkec')
             ->where('idpuskesmas', $idpus)
-            ->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 61) //Tanggal Sekarang
-            ->where('CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) >', 0); //Tanggal Sekarang
+            ->where('FLOOR(DATEDIFF(CURDATE(), tgllahir)/30.40) <', 60) //Tanggal Sekarang
+            ->where('FLOOR(DATEDIFF(CURDATE(), tgllahir)/30.40) >', 0); //Tanggal Sekarang
         return $this->db->get()->first_row();
     }
     private function _getKetTimbangan($idpus, $ket, $th, $bl)
@@ -182,7 +183,7 @@ class Puskesmas_model extends CI_Model
     }
     public function getListRinci($idp, $ket, $th, $bl)
     {
-        $this->db->select('penduduk.nama, CEIL(DATEDIFF(CURDATE(), tgllahir)/30.40) as umur, pengukuran.berat')
+        $this->db->select('penduduk.nama, FLOOR(DATEDIFF(beritaacara.tglacara, tgllahir)/30.40) as umur, pengukuran.berat')
             ->from('pengukuran')
             ->join('beritaacara', 'pengukuran.idacara = beritaacara.idacara')
             ->join('penduduk', 'pengukuran.nik = penduduk.nik')
